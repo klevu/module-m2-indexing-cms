@@ -1,0 +1,45 @@
+{
+    "name": "klevu/module-m2-indexing-cms",
+    "description": "Provides CMS data and configuration for Klevu indexing",
+    "type": "magento2-module",
+    "version": "0.1.0",
+    "require": {
+        "klevu/module-m2-indexing": "0.1.0",
+        "magento/module-cms": "^104.0.4",
+        "magento/framework": "^103.0.4",
+        "php": "~8.1.0|~8.2.0"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Klevu\\IndexingCms\\": ""
+        }
+    },
+    "license": [
+        "MIT"
+    ],
+    "authors": [
+        {
+            "name": "Klevu Oy",
+            "email": "niraj.aswani@klevu.com",
+            "homepage": "https://www.klevu.com/"
+        }
+    ],
+    "conflict": {
+        "klevu/module-search": "*",
+        "klevu/module-adtocart": "*",
+        "klevu/module-categorynavigation": "*",
+        "klevu/module-content": "*",
+        "klevu/module-frontend-js": "*",
+        "klevu/module-logger": "*",
+        "klevu/module-metadata": "*",
+        "klevu/module-msi": "*",
+        "klevu/module-mysqlcompat": "*",
+        "klevu/module-productsearch": "*",
+        "klevu/module-recommendations": "*",
+        "klevu/module-registry": "*",
+        "klevu/module-troubleshoot": "*"
+    }
+}

@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <virtualType name="Klevu\IndexingCms\Service\Determiner\IsIndexableDeterminer"
+                 type="Klevu\Indexing\Service\Determiner\IsIndexableDeterminer">
+        <arguments>
+            <argument name="isIndexableDeterminers" xsi:type="array">
+                <item name="DisabledProductsIsIndexableDeterminer"
+                      xsi:type="object">Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableDeterminer</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\SyncEnabledProvider"
+                 type="Klevu\Configuration\Service\Provider\ScopeConfigProvider">
+        <arguments>
+            <argument name="path" xsi:type="string">klevu/indexing/enable_cms_sync</argument>
+            <argument name="returnType"
+                      xsi:type="const">Klevu\Configuration\Service\Provider\ScopeConfigProvider::TYPE_BOOLEAN</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Klevu\IndexingCms\Service\Provider\CmsEntityProvider">
+        <arguments>
+            <argument name="logger" xsi:type="object">Klevu\Indexing\Logger\Logger</argument>
+            <argument name="syncEnabledProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\SyncEnabledProvider</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\EntityDiscoveryProvider"
+                 type="Klevu\Indexing\Service\Provider\EntityDiscoveryProvider">
+        <arguments>
+            <argument name="entityType" xsi:type="string">KLEVU_CMS</argument>
+            <argument name="entityProviders" xsi:type="array">
+                <item name="cms"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\CmsEntityProvider</item>
+            </argument>
+            <argument name="isIndexableDeterminer"
+                      xsi:type="object">Klevu\IndexingCms\Service\Determiner\IsIndexableDeterminer</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Klevu\Indexing\Service\EntityDiscoveryOrchestratorService">
+        <arguments>
+            <argument name="discoveryProviders" xsi:type="array">
+                <item name="cms"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\EntityDiscoveryProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableDeterminer">
+        <arguments>
+            <argument name="logger" xsi:type="object">Klevu\Indexing\Logger\Logger</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\IndexingCms\Service\EntityUpdateResponderService">
+        <arguments>
+            <argument name="logger" xsi:type="object">Klevu\Indexing\Logger\Logger</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Cms\Model\ResourceModel\Page">
+        <plugin name="Klevu_IndexingCms::CmsPageResourceModelPlugin"
+                type="Klevu\IndexingCms\Plugin\CmsPageResourceModelPlugin" />
+    </type>
+
+    <type name="Klevu\IndexingCms\Observer\CmsPageDeleteObserver">
+        <arguments>
+            <argument name="responderService"
+                      xsi:type="object">Klevu\IndexingCms\Service\EntityUpdateResponderService</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\IndexingCms\Plugin\CmsPageResourceModelPlugin">
+        <arguments>
+            <argument name="responderService"
+                      xsi:type="object">Klevu\IndexingCms\Service\EntityUpdateResponderService</argument>
+            <argument name="attributesToWatch" xsi:type="array">
+                <item name="content" xsi:type="const">Magento\Cms\Api\Data\PageInterface::CONTENT</item>
+                <item name="content_heading" xsi:type="const">Magento\Cms\Api\Data\PageInterface::CONTENT_HEADING</item>
+                <item name="identifier" xsi:type="const">Magento\Cms\Api\Data\PageInterface::IDENTIFIER</item>
+                <item name="is_active" xsi:type="string">is_active</item>
+                <item name="meta_description" xsi:type="const">Magento\Cms\Api\Data\PageInterface::META_DESCRIPTION</item>
+                <item name="meta_keywords" xsi:type="const">Magento\Cms\Api\Data\PageInterface::META_KEYWORDS</item>
+                <item name="store_id" xsi:type="string">store_id</item>
+                <item name="title" xsi:type="const">Magento\Cms\Api\Data\PageInterface::TITLE</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Pipelines -->
+    <virtualType name="Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider"
+                 type="Klevu\Indexing\Service\Provider\Sync\EntityIndexingRecordProvider">
+        <arguments>
+            <argument name="entityProviders" xsi:type="array">
+                <item name="cms"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\CmsEntityProvider</item>
+            </argument>
+            <argument name="indexingRecordCreatorService"
+                      xsi:type="object">Klevu\IndexingCms\Service\EntityIndexingRecordCreatorService</argument>
+            <argument name="entityType" xsi:type="string">KLEVU_CMS</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider\Add"
+                 type="Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider">
+        <arguments>
+            <argument name="action" xsi:type="string">Add</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider\Delete"
+                 type="Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider">
+        <arguments>
+            <argument name="action" xsi:type="string">Delete</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider\Update"
+                 type="Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider">
+        <arguments>
+            <argument name="action" xsi:type="string">Update</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\EntityIndexerService\Add"
+                 type="Klevu\Indexing\Service\EntityIndexerService">
+        <arguments>
+            <argument name="entityIndexingRecordProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider\Add</argument>
+            <argument name="pipelineConfigurationFilepath"
+                      xsi:type="string">Klevu_IndexingCms::etc/pipeline/add.yml</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\EntityIndexerService\Delete"
+                 type="Klevu\Indexing\Service\EntityIndexerService">
+        <arguments>
+            <argument name="entityIndexingRecordProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider\Delete</argument>
+            <argument name="pipelineConfigurationFilepath"
+                      xsi:type="string">Klevu_IndexingCms::etc/pipeline/delete.yml</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\EntityIndexerService\Update"
+                 type="Klevu\Indexing\Service\EntityIndexerService">
+        <arguments>
+            <argument name="entityIndexingRecordProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider\Update</argument>
+            <argument name="pipelineConfigurationFilepath"
+                      xsi:type="string">Klevu_IndexingCms::etc/pipeline/update.yml</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Klevu\Indexing\Service\EntitySyncOrchestratorService">
+        <arguments>
+            <argument name="entityIndexerServices" xsi:type="array">
+                <item name="KLEVU_CMS" xsi:type="array">
+                    <item name="add"
+                          xsi:type="object">Klevu\IndexingCms\Service\EntityIndexerService\Add</item>
+                    <item name="delete"
+                          xsi:type="object">Klevu\IndexingCms\Service\EntityIndexerService\Delete</item>
+                    <item name="update"
+                          xsi:type="object">Klevu\IndexingCms\Service\EntityIndexerService\Update</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+</config>

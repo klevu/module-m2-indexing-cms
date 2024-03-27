@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="cms" translate="label" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Indexing - CMS</label>
+        <field id="exclude_disabled_cms"
+               translate="label comment tooltip"
+               sortOrder="20"
+               type="select"
+               showInDefault="1"
+               showInWebsite="0"
+               showInStore="0"
+               canRestore="1">
+            <label>Exclude Disabled CMS Pages</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            <comment><![CDATA[Reduces the total records index, but will increase indexing time and complexity]]></comment>
+            <config_path>klevu/indexing/exclude_disabled_cms</config_path>
+        </field>
+    </group>
+</config>

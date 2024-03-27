@@ -1,0 +1,51 @@
+pipeline: Pipeline\CreateRecord
+stages:
+  id:
+    pipeline: Stage\Extract
+    args:
+      extraction: currentPage::getPageId()
+      transformations: Prepend("pageid_")
+  type:
+    pipeline: Stage\StaticValue
+    args:
+      value: "KLEVU_CMS"
+  attributes:
+    pipeline: Pipeline\CreateRecord
+    stages:
+      name:
+        pipeline: Pipeline\CreateRecord
+        stages:
+          default:
+            stages:
+              -
+                pipeline: Stage\Extract
+                args:
+                  extraction: currentPage::getTitle()
+      description:
+        pipeline: Pipeline\CreateRecord
+        stages:
+          default:
+            stages:
+              -
+                pipeline: Stage\Extract
+                args:
+                  extraction: currentPage::getContent()
+                  transformations:
+                    - Prepend(" ")
+                    - Prepend($currentPage::getContentHeading())
+                    - Trim
+                    - StripTags(null, ["script"])
+                    - EscapeHtml
+      url:
+        stages:
+          -
+            pipeline: Stage\Extract
+            args:
+              extraction: currentPage::getIdentifier()
+              transformations: Prepend($store::getForCurrentStore().base_url)
+      visibility:
+        stages:
+          -
+            pipeline: Stage\StaticValue
+            args:
+              value: ["search"]
