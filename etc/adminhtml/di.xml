@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="Magento\Cms\Ui\Component\Listing\Column\PageActions">
+        <plugin name="Klevu_IndexingCms::UiComponentListingColumnsAddHistoryToActions"
+                type="Klevu\IndexingCms\Plugin\Ui\Component\Listing\Column\PageActionsPlugin"/>
+    </type>
+
+    <virtualType name="Klevu\IndexingCms\Ui\Component\Listing\EntitySyncNextActionDataProvider"
+                 type="Klevu\Indexing\Ui\Component\Listing\EntitySyncNextActionDataProvider">
+        <arguments>
+            <argument name="entityType" xsi:type="string">KLEVU_CMS</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Ui\Component\Listing\EntitySyncHistoryDataProvider"
+                 type="Klevu\Indexing\Ui\Component\Listing\EntitySyncHistoryDataProvider">
+        <arguments>
+            <argument name="entityType" xsi:type="string">KLEVU_CMS</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Ui\Component\Listing\EntitySyncHistoryConsolidationDataProvider"
+                 type="Klevu\Indexing\Ui\Component\Listing\EntitySyncHistoryConsolidationDataProvider">
+        <arguments>
+            <argument name="entityType" xsi:type="string">KLEVU_CMS</argument>
+        </arguments>
+    </virtualType>
+
+</config>

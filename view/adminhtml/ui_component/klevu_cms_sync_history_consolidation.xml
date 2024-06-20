@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="namespace" xsi:type="string">klevu_cms_sync_history_consolidation</item>
+            <item name="provider"
+                  xsi:type="string">klevu_cms_sync_history_consolidation.klevu_cms_sync_history_consolidation_data_source</item>
+        </item>
+    </argument>
+
+    <settings>
+        <spinner>sync_history_consolidation_columns</spinner>
+        <deps>
+            <dep>klevu_cms_sync_history_consolidation.klevu_cms_sync_history_consolidation_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="klevu_cms_sync_history_consolidation_data_source"
+                component="Klevu_Indexing/js/grid/indexing/history/provider">
+        <settings>
+            <storageConfig>
+                <param name="cacheRequests" xsi:type="boolean">false</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+            <filterUrlParams>
+                <param name="target_id">*</param>
+            </filterUrlParams>
+        </settings>
+        <aclResource>Klevu_Indexing::indexing</aclResource>
+        <dataProvider class="Klevu\IndexingCms\Ui\Component\Listing\EntitySyncHistoryConsolidationDataProvider"
+                      name="klevu_cms_sync_history_consolidation_data_source">
+            <settings>
+                <requestFieldName>target_id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+    </listingToolbar>
+
+    <columns name="sync_history_consolidation_columns">
+        <column name="entity_id" sortOrder="10">
+            <settings>
+                <label translate="true">ID</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="target_id" sortOrder="20">
+            <settings>
+                <label translate="true">Target ID</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="api_key" sortOrder="30">
+            <settings>
+                <label translate="true">API Key</label>
+            </settings>
+        </column>
+        <column name="history" sortOrder="70">
+            <settings>
+                <label translate="true">History</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+            </settings>
+        </column>
+        <column name="date" sortOrder="80">
+            <settings>
+                <label translate="true">Date</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+    </columns>
+</listing>
