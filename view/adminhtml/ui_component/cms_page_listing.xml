@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+    <modal name="klevu_cms_sync_info_modal">
+        <settings>
+            <options>
+                <option name="title" xsi:type="string" translate="true">Klevu Entity Sync Information</option>
+            </options>
+        </settings>
+
+        <container name="klevu_cms_sync_info_container">
+            <fieldset name="klevu_cms_next_action_fieldset"
+                      sortOrder="10">
+                <settings>
+                    <label translate="true">Next Sync Actions</label>
+                    <collapsible>true</collapsible>
+                    <opened>true</opened>
+                </settings>
+                <insertListing name="klevu_cms_sync_next_action_listing">
+                    <settings>
+                        <dataLinks>
+                            <exports>false</exports>
+                            <imports>true</imports>
+                        </dataLinks>
+                        <autoRender>false</autoRender>
+                        <dataScope>klevu_cms_sync_next_action_listing</dataScope>
+                        <loading>false</loading>
+                        <ns>klevu_cms_sync_next_action_listing</ns>
+                        <externalProvider>${ $.ns }.klevu_cms_sync_next_action_listing_data_source</externalProvider>
+                    </settings>
+                </insertListing>
+            </fieldset>
+
+            <fieldset name="klevu_cms_sync_history_fieldset"
+                      sortOrder="20">
+                <settings>
+                    <label translate="true">Sync History (Today)</label>
+                    <collapsible>true</collapsible>
+                    <opened>false</opened>
+                </settings>
+                <insertListing name="klevu_cms_sync_history">
+                    <settings>
+                        <dataLinks>
+                            <exports>false</exports>
+                            <imports>true</imports>
+                        </dataLinks>
+                        <autoRender>false</autoRender>
+                        <dataScope>klevu_cms_sync_history</dataScope>
+                        <loading>false</loading>
+                        <ns>klevu_cms_sync_history</ns>
+                        <externalProvider>${ $.ns }.klevu_cms_sync_history_data_source</externalProvider>
+                    </settings>
+                </insertListing>
+            </fieldset>
+
+            <fieldset name="klevu_cms_sync_consolidated_history_fieldset"
+                      sortOrder="30">
+                <settings>
+                    <label translate="true">Sync History (Previous Days)</label>
+                    <collapsible>true</collapsible>
+                    <opened>false</opened>
+                </settings>
+                <insertListing name="klevu_cms_sync_history_consolidation">
+                    <settings>
+                        <dataLinks>
+                            <exports>false</exports>
+                            <imports>true</imports>
+                        </dataLinks>
+                        <autoRender>false</autoRender>
+                        <dataScope>klevu_cms_sync_history_consolidation</dataScope>
+                        <loading>false</loading>
+                        <ns>klevu_cms_sync_history_consolidation</ns>
+                        <externalProvider>${ $.ns }.klevu_cms_sync_history_consolidation_data_source</externalProvider>
+                    </settings>
+                </insertListing>
+            </fieldset>
+        </container>
+    </modal>
+
+</listing>

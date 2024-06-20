@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="namespace" xsi:type="string">klevu_cms_sync_history</item>
+            <item name="provider" xsi:type="string">klevu_cms_sync_history.klevu_cms_sync_history_data_source</item>
+        </item>
+    </argument>
+
+    <settings>
+        <spinner>sync_history_columns</spinner>
+        <deps>
+            <dep>klevu_cms_sync_history.klevu_cms_sync_history_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="klevu_cms_sync_history_data_source"
+                component="Klevu_Indexing/js/grid/indexing/history/provider">
+        <settings>
+            <storageConfig>
+                <param name="cacheRequests" xsi:type="boolean">false</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+            <filterUrlParams>
+                <param name="target_id">*</param>
+            </filterUrlParams>
+        </settings>
+        <aclResource>Klevu_Indexing::indexing</aclResource>
+        <dataProvider class="Klevu\IndexingCms\Ui\Component\Listing\EntitySyncHistoryDataProvider"
+                      name="klevu_cms_sync_history_data_source">
+            <settings>
+                <requestFieldName>target_id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+    </listingToolbar>
+
+    <columns name="sync_history_columns">
+        <column name="entity_id" sortOrder="10">
+            <settings>
+                <label translate="true">ID</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="target_id" sortOrder="20">
+            <settings>
+                <label translate="true">Target ID</label>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="api_key" sortOrder="30">
+            <settings>
+                <label translate="true">API Key</label>
+            </settings>
+        </column>
+        <column name="action" sortOrder="70">
+            <settings>
+                <options class="Klevu\IndexingApi\Model\Source\ActionsSource"/>
+                <dataType>select</dataType>
+                <label translate="true">Action</label>
+            </settings>
+        </column>
+        <column name="action_timestamp" sortOrder="80">
+            <settings>
+                <label translate="true">Date</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <column name="is_success" sortOrder="90" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                <dataType>select</dataType>
+                <label translate="true">Successful</label>
+            </settings>
+        </column>
+        <column name="message" sortOrder="100">
+            <settings>
+                <label translate="true">Message</label>
+            </settings>
+        </column>
+    </columns>
+</listing>
