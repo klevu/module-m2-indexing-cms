@@ -11,6 +11,7 @@ namespace Klevu\IndexingCms\Service;
 use Klevu\Indexing\Exception\InvalidIndexingRecordDataTypeException;
 use Klevu\Indexing\Model\EntityIndexingRecordFactory;
 use Klevu\IndexingApi\Model\EntityIndexingRecordInterface;
+use Klevu\IndexingApi\Model\Source\Actions;
 use Klevu\IndexingApi\Service\EntityIndexingRecordCreatorServiceInterface;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -32,6 +33,7 @@ class EntityIndexingRecordCreatorService implements EntityIndexingRecordCreatorS
 
     /**
      * @param int $recordId
+     * @param Actions $action
      * @param PageInterface|ExtensibleDataInterface $entity
      * @param PageInterface|ExtensibleDataInterface|null $parent
      *
@@ -39,6 +41,7 @@ class EntityIndexingRecordCreatorService implements EntityIndexingRecordCreatorS
      */
     public function execute(
         int $recordId,
+        Actions $action,
         PageInterface|ExtensibleDataInterface $entity,
         // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
         PageInterface|ExtensibleDataInterface|null $parent = null,
@@ -66,6 +69,7 @@ class EntityIndexingRecordCreatorService implements EntityIndexingRecordCreatorS
             'recordId' => $recordId,
             'entity' => $entity,
             'parent' => null,
+            'action' => $action,
         ]);
     }
 }

@@ -136,7 +136,7 @@
             <argument name="entityIndexingRecordProvider"
                       xsi:type="object">Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider\Add</argument>
             <argument name="pipelineConfigurationFilepath"
-                      xsi:type="string">Klevu_IndexingCms::etc/pipeline/add.yml</argument>
+                      xsi:type="string">Klevu_IndexingCms::etc/pipeline/add_update.yml</argument>
         </arguments>
     </virtualType>
 
@@ -156,7 +156,7 @@
             <argument name="entityIndexingRecordProvider"
                       xsi:type="object">Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider\Update</argument>
             <argument name="pipelineConfigurationFilepath"
-                      xsi:type="string">Klevu_IndexingCms::etc/pipeline/update.yml</argument>
+                      xsi:type="string">Klevu_IndexingCms::etc/pipeline/add_update.yml</argument>
         </arguments>
     </virtualType>
 
@@ -172,6 +172,13 @@
                           xsi:type="object">Klevu\IndexingCms\Service\EntityIndexerService\Update</item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\IndexingCms\Observer\Admin\System\Config\UpdateCmsSyncSettingsObserver">
+        <arguments>
+            <argument name="createCronScheduleAction"
+                      xsi:type="object">Klevu\Indexing\Service\Action\Cron\CreateCronScheduleForEntityDiscoveryAction</argument>
         </arguments>
     </type>
 

@@ -215,7 +215,7 @@ class EntitySyncHistoryConsolidationDataProviderTest extends TestCase
         );
         $this->assertNull($record1[SyncHistoryEntityConsolidationRecord::TARGET_PARENT_ID]);
         $this->assertSame(
-            expected: date('M d, Y'),
+            expected: date('M j, Y'),
             actual: $record1[SyncHistoryEntityConsolidationRecord::DATE] ?? null,
         );
         $this->assertSame(
@@ -250,7 +250,7 @@ class EntitySyncHistoryConsolidationDataProviderTest extends TestCase
         );
 
         $this->assertSame(
-            expected: date('M d, Y'),
+            expected: date('M j, Y'),
             actual: $record2[SyncHistoryEntityConsolidationRecord::DATE] ?? null,
         );
         $this->assertSame(
@@ -304,7 +304,7 @@ class EntitySyncHistoryConsolidationDataProviderTest extends TestCase
         $record = array_shift($result['items']);
 
         $this->assertSame(
-            expected: date('n/d/y'),
+            expected: date('n/j/y'),
             actual: $record[SyncHistoryEntityConsolidationRecord::DATE] ?? null,
         );
         $this->assertSame(

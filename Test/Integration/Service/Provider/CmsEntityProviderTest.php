@@ -292,7 +292,7 @@ class CmsEntityProviderTest extends TestCase
     public function testGet_ThrowsLogicException_WhenMetadataPoolThrowsException(): void
     {
         $this->markTestSkipped('Test does not enter get method, no idea why');
-        $this->createStore();
+        $this->createStore(); // @phpstan-ignore-line Remove if test no longer marked skipped
         $storeFixture = $this->storeFixturesPool->get('test_store');
         $scopeProvider = $this->objectManager->get(ScopeProviderInterface::class);
         $scopeProvider->setCurrentScope(scope: $storeFixture->get());
