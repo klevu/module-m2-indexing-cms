@@ -2,7 +2,7 @@ stages:
   logStart:
     pipeline: Indexing\Stage\Log
     args:
-      message: "Start Update CMS Pipeline"
+      message: "Start Add CMS Pipeline"
   iteratePages:
     pipeline: Pipeline\Iterate
     args:
@@ -13,8 +13,8 @@ stages:
           registerIndexingRecordToContext:
             pipeline: Stage\RegisterContext
             args:
-              contextKey: currentIndexingRecord
-          registerCategoryToContext:
+              contextKey: "currentIndexingRecord"
+          registerPageToContext:
             stages:
               extractCategory:
                 pipeline: Stage\Extract
@@ -23,13 +23,13 @@ stages:
               registerCategory:
                 pipeline: Stage\RegisterContext
                 args:
-                  contextKey: currentPage
+                  contextKey: "currentPage"
           registerActionToContext:
             stages:
-              createAction:
-                pipeline: Stage\StaticValue
+              extractAction:
+                pipeline: Stage\Extract
                 args:
-                  value: "Update"
+                  extraction: currentIndexingRecord::getAction()
               registerAction:
                 pipeline: Stage\RegisterContext
                 args:
@@ -49,9 +49,8 @@ stages:
           createRecord:
             import: transform-page.yml
   processPayload:
-    #        import: Klevu_Indexing::etc/pipeline/process-batch-payload.yml
-    import: ../../../module-m2-indexing/etc/pipeline/process-batch-payload.yml
+    import: Klevu_Indexing::etc/pipeline/process-batch-payload.yml
   logEnd:
     pipeline: Indexing\Stage\Log
     args:
-      message: "End Update CMS Pipeline"
+      message: "End Add CMS Pipeline"

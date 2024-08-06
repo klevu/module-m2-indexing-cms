@@ -42,8 +42,7 @@ stages:
               extraction: currentIndexingRecord::getEntityId()
               transformations: Prepend("pageid_")
   processPayload:
-    #        import: Klevu_Indexing::etc/pipeline/process-batch-delete-payload.yml
-    import: ../../../module-m2-indexing/etc/pipeline/process-batch-delete-payload.yml
+    import: Klevu_Indexing::etc/pipeline/process-batch-delete-payload.yml
   logEnd:
     pipeline: Indexing\Stage\Log
     args:

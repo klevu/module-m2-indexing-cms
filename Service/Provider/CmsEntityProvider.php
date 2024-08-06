@@ -20,6 +20,8 @@ use Psr\Log\LoggerInterface;
 
 class CmsEntityProvider implements EntityProviderInterface
 {
+    public const ENTITY_SUBTYPE_CMS_PAGE = 'cms_page';
+
     /**
      * @var PageCollectionFactory
      */
@@ -36,23 +38,30 @@ class CmsEntityProvider implements EntityProviderInterface
      * @var ScopeConfigProviderInterface
      */
     private readonly ScopeConfigProviderInterface $syncEnabledProvider;
+    /**
+     * @var string
+     */
+    private readonly string $entitySubtype;
 
     /**
      * @param PageCollectionFactory $pageCollectionFactory
      * @param MetadataPool $metadataPool
      * @param LoggerInterface $logger
      * @param ScopeConfigProviderInterface $syncEnabledProvider
+     * @param string $entitySubtype
      */
     public function __construct(
         PageCollectionFactory $pageCollectionFactory,
         MetadataPool $metadataPool,
         LoggerInterface $logger,
         ScopeConfigProviderInterface $syncEnabledProvider,
+        string $entitySubtype = self::ENTITY_SUBTYPE_CMS_PAGE,
     ) {
         $this->pageCollectionFactory = $pageCollectionFactory;
         $this->metadataPool = $metadataPool;
         $this->logger = $logger;
         $this->syncEnabledProvider = $syncEnabledProvider;
+        $this->entitySubtype = $entitySubtype;
     }
 
     /**
@@ -101,6 +110,14 @@ class CmsEntityProvider implements EntityProviderInterface
         foreach ($pageCollection as $page) {
             yield $page;
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntitySubtype(): string
+    {
+        return $this->entitySubtype;
     }
 
     /**

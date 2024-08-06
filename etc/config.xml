@@ -8,7 +8,7 @@
         <klevu>
             <indexing>
                 <enable_cms_sync>1</enable_cms_sync>
-                <exclude_disabled_pages>0</exclude_disabled_pages>
+                <exclude_disabled_cms>1</exclude_disabled_cms>
             </indexing>
         </klevu>
     </default>

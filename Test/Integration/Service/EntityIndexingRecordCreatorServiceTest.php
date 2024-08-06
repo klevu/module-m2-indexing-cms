@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Klevu\IndexingCms\Test\Integration\Service;
 
 use Klevu\Indexing\Exception\InvalidIndexingRecordDataTypeException;
+use Klevu\IndexingApi\Model\Source\Actions;
 use Klevu\IndexingApi\Service\EntityIndexingRecordCreatorServiceInterface;
 use Klevu\IndexingCms\Service\EntityIndexingRecordCreatorService;
 use Klevu\TestFixtures\Catalog\CategoryTrait;
@@ -83,6 +84,7 @@ class EntityIndexingRecordCreatorServiceTest extends TestCase
         $service = $this->instantiateTestObject();
         $service->execute(
             recordId: 1,
+            action: Actions::ADD,
             entity: $category,
         );
     }
@@ -109,6 +111,7 @@ class EntityIndexingRecordCreatorServiceTest extends TestCase
         $service = $this->instantiateTestObject();
         $service->execute(
             recordId: 1,
+            action: Actions::NO_ACTION,
             entity: $page,
             parent: $category,
         );
@@ -123,6 +126,7 @@ class EntityIndexingRecordCreatorServiceTest extends TestCase
         $service = $this->instantiateTestObject();
         $result = $service->execute(
             recordId: 1,
+            action: Actions::DELETE,
             entity: $page,
         );
 
@@ -131,6 +135,10 @@ class EntityIndexingRecordCreatorServiceTest extends TestCase
             actual: (int)$result->getEntity()->getId(),
         );
         $this->assertNull(actual: $result->getParent());
+        $this->assertSame(
+            expected: Actions::DELETE->value,
+            actual: $result->getAction(),
+        );
     }
 
     public function testExecute_ReturnsIndexingRecord_WithAllData(): void
@@ -142,6 +150,7 @@ class EntityIndexingRecordCreatorServiceTest extends TestCase
         $service = $this->instantiateTestObject();
         $result = $service->execute(
             recordId: 1,
+            action: Actions::UPDATE,
             entity: $page,
             parent: null,
         );
@@ -152,6 +161,10 @@ class EntityIndexingRecordCreatorServiceTest extends TestCase
         );
         $this->assertNull(
             actual: $result->getParent(),
+        );
+        $this->assertSame(
+            expected: Actions::UPDATE->value,
+            actual: $result->getAction(),
         );
     }
 }

@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 
 class DisabledPagesIsIndexableDeterminer implements IsIndexableDeterminerInterface
 {
-    private const XML_PATH_EXCLUDE_DISABLED_CMS = 'klevu/indexing/exclude_disabled_cms';
+    public const XML_PATH_EXCLUDE_DISABLED_CMS = 'klevu/indexing/exclude_disabled_cms';
 
     /**
      * @var ScopeConfigInterface
@@ -51,6 +51,7 @@ class DisabledPagesIsIndexableDeterminer implements IsIndexableDeterminerInterfa
     /**
      * @param PageInterface|ExtensibleDataInterface $entity
      * @param StoreInterface $store
+     * @param string $entitySubtype
      *
      * @return bool
      * @throws \InvalidArgumentException
@@ -58,6 +59,7 @@ class DisabledPagesIsIndexableDeterminer implements IsIndexableDeterminerInterfa
     public function execute(
         PageInterface|ExtensibleDataInterface $entity,
         StoreInterface $store,
+        string $entitySubtype = '', // phpcs:ignore SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
     ): bool {
         if (!($entity instanceof PageInterface)) {
             throw new \InvalidArgumentException(
