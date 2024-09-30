@@ -11,5 +11,8 @@
         <section id="klevu_developer">
             <include path="Klevu_IndexingCms::system/developer.xml"/>
         </section>
+        <section id="klevu_information">
+            <include path="Klevu_IndexingCms::system/information.xml"/>
+        </section>
     </system>
 </config>

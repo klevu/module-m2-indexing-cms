@@ -33,6 +33,11 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @covers EntitySyncOrchestratorService
+ * @method EntitySyncOrchestratorServiceInterface instantiateTestObject(?array $arguments = null)
+ * @method EntitySyncOrchestratorServiceInterface instantiateTestObjectFromInterface(?array $arguments = null)
+ */
 class EntitySyncOrchestratorServiceTest extends TestCase
 {
     use IndexingEntitiesTrait;
@@ -129,8 +134,8 @@ class EntitySyncOrchestratorServiceTest extends TestCase
                 'Method: {method}, Warning: {message}',
                 [
                     'method' => 'Klevu\Indexing\Service\EntitySyncOrchestratorService::getCredentialsArray',
-                    'message' => 'No Account found for provided API Key. '
-                        . 'Check the JS API Key (incorrect-key) provided.',
+                    'message' => 'No Account found for provided API Keys. '
+                        . 'Check the JS API Keys (incorrect-key) provided.',
                 ],
             );
 
@@ -138,7 +143,7 @@ class EntitySyncOrchestratorServiceTest extends TestCase
             'logger' => $mockLogger,
             'entityIndexerServices' => [],
         ]);
-        $service->execute(apiKey: 'incorrect-key');
+        $service->execute(apiKeys: ['incorrect-key']);
     }
 
     /**
@@ -178,8 +183,8 @@ class EntitySyncOrchestratorServiceTest extends TestCase
 
         $service = $this->instantiateTestObject();
         $result = $service->execute(
-            entityType: 'KLEVU_CMS',
-            apiKey: $apiKey,
+            entityTypes: ['KLEVU_CMS'],
+            apiKeys: [$apiKey],
             via: 'CLI::klevu:indexing:entity-sync',
         );
 
@@ -303,8 +308,8 @@ class EntitySyncOrchestratorServiceTest extends TestCase
 
         $service = $this->instantiateTestObject();
         $result = $service->execute(
-            entityType: 'KLEVU_CMS',
-            apiKey: $apiKey,
+            entityTypes: ['KLEVU_CMS'],
+            apiKeys: [$apiKey],
             via: 'CLI::klevu:indexing:entity-sync',
         );
 
@@ -428,8 +433,8 @@ class EntitySyncOrchestratorServiceTest extends TestCase
 
         $service = $this->instantiateTestObject();
         $result = $service->execute(
-            entityType: 'KLEVU_CMS',
-            apiKey: $apiKey,
+            entityTypes: ['KLEVU_CMS'],
+            apiKeys: [$apiKey],
             via: 'CLI::klevu:indexing:entity-sync',
         );
 

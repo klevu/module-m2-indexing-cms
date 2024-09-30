@@ -9,7 +9,7 @@
                  type="Klevu\Indexing\Service\Determiner\IsIndexableDeterminer">
         <arguments>
             <argument name="isIndexableDeterminers" xsi:type="array">
-                <item name="DisabledProductsIsIndexableDeterminer"
+                <item name="DisabledPagesIsIndexableDeterminer"
                       xsi:type="object">Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableDeterminer</item>
             </argument>
         </arguments>
@@ -18,7 +18,7 @@
     <virtualType name="Klevu\IndexingCms\Service\Provider\SyncEnabledProvider"
                  type="Klevu\Configuration\Service\Provider\ScopeConfigProvider">
         <arguments>
-            <argument name="path" xsi:type="string">klevu/indexing/enable_cms_sync</argument>
+            <argument name="path" xsi:type="const">Klevu\IndexingCms\Constants::XML_PATH_CMS_SYNC_ENABLED</argument>
             <argument name="returnType"
                       xsi:type="const">Klevu\Configuration\Service\Provider\ScopeConfigProvider::TYPE_BOOLEAN</argument>
         </arguments>
@@ -109,6 +109,79 @@
         </arguments>
     </virtualType>
 
+    <type name="Klevu\PlatformPipelines\Service\Provider\PipelineConfigurationOverridesFilepathsProviderProvider">
+        <arguments>
+            <argument name="pipelineConfigurationOverridesFilepathsProviders" xsi:type="array">
+                <item name="KLEVU_CMS::add"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\PipelineConfigurationOverridesFilepathsProvider\Add</item>
+                <item name="KLEVU_CMS::delete"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\PipelineConfigurationOverridesFilepathsProvider\Delete</item>
+                <item name="KLEVU_CMS::update"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\PipelineConfigurationOverridesFilepathsProvider\Update</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\PlatformPipelines\Service\Provider\PipelineConfigurationProvider">
+        <arguments>
+            <argument name="pipelineConfigurationFilepaths" xsi:type="array">
+                <item name="KLEVU_CMS::add" xsi:type="string">Klevu_IndexingCms::etc/pipeline/add_update.yml</item>
+                <item name="KLEVU_CMS::delete" xsi:type="string">Klevu_IndexingCms::etc/pipeline/delete.yml</item>
+                <item name="KLEVU_CMS::update" xsi:type="string">Klevu_IndexingCms::etc/pipeline/add_update.yml</item>
+            </argument>
+            <argument name="pipelineConfigurationOverridesFilepathsProviders" xsi:type="array">
+                <item name="KLEVU_CMS::add"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\PipelineConfigurationOverridesFilepathsProvider\Add</item>
+                <item name="KLEVU_CMS::delete"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\PipelineConfigurationOverridesFilepathsProvider\Delete</item>
+                <item name="KLEVU_CMS::update"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\PipelineConfigurationOverridesFilepathsProvider\Update</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\GeneratedConfigurationOverridesFilepathProvider\AddUpdate"
+                 type="Klevu\Indexing\Service\Provider\GeneratedConfigurationOverridesFilepathProvider">
+        <arguments>
+            <argument name="filepathInVar" xsi:type="string">klevu/indexing/pipeline/cms/add_update.overrides.yml</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\ConfigurationOverridesHandler\AddUpdate"
+                 type="Klevu\Indexing\Service\ConfigurationOverridesHandler">
+        <arguments>
+            <argument name="generatedConfigurationOverridesFilepathProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\GeneratedConfigurationOverridesFilepathProvider\AddUpdate</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Klevu\IndexingCms\Service\ConfigurationOverridesHandler\AddUpdate\Force"
+                 type="Klevu\IndexingCms\Service\ConfigurationOverridesHandler\AddUpdate">
+        <arguments>
+            <argument name="forceFileRegeneration" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\GeneratedConfigurationOverridesFilepathProvider\Delete"
+                 type="Klevu\Indexing\Service\Provider\GeneratedConfigurationOverridesFilepathProvider">
+        <arguments>
+            <argument name="filepathInVar" xsi:type="string">klevu/indexing/pipeline/cms/delete.overrides.yml</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\ConfigurationOverridesHandler\Delete"
+                 type="Klevu\Indexing\Service\ConfigurationOverridesHandler">
+        <arguments>
+            <argument name="generatedConfigurationOverridesFilepathProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\GeneratedConfigurationOverridesFilepathProvider\Delete</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Klevu\IndexingCms\Service\ConfigurationOverridesHandler\Delete\Force"
+                 type="Klevu\IndexingCms\Service\ConfigurationOverridesHandler\Delete">
+        <arguments>
+            <argument name="forceFileRegeneration" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
+
     <virtualType name="Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider\Add"
                  type="Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider">
         <arguments>
@@ -130,13 +203,30 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="Klevu\IndexingCms\Service\Provider\PipelineConfigurationOverridesFilepathsProvider\Add"
+                 type="Klevu\PlatformPipelines\Service\Provider\PipelineConfigurationOverridesFilepathsProvider">
+        <arguments>
+            <argument name="generatedConfigurationOverridesFilepathProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\GeneratedConfigurationOverridesFilepathProvider\AddUpdate</argument>
+        </arguments>
+    </virtualType>
+
     <virtualType name="Klevu\IndexingCms\Service\EntityIndexerService\Add"
                  type="Klevu\Indexing\Service\EntityIndexerService">
         <arguments>
             <argument name="entityIndexingRecordProvider"
                       xsi:type="object">Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider\Add</argument>
-            <argument name="pipelineConfigurationFilepath"
-                      xsi:type="string">Klevu_IndexingCms::etc/pipeline/add_update.yml</argument>
+            <argument name="pipelineIdentifier" xsi:type="string">KLEVU_CMS::add</argument>
+            <argument name="configurationOverridesHandler"
+                      xsi:type="object">Klevu\IndexingCms\Service\ConfigurationOverridesHandler\AddUpdate</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\PipelineConfigurationOverridesFilepathsProvider\Delete"
+                 type="Klevu\PlatformPipelines\Service\Provider\PipelineConfigurationOverridesFilepathsProvider">
+        <arguments>
+            <argument name="generatedConfigurationOverridesFilepathProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\GeneratedConfigurationOverridesFilepathProvider\Delete</argument>
         </arguments>
     </virtualType>
 
@@ -145,8 +235,17 @@
         <arguments>
             <argument name="entityIndexingRecordProvider"
                       xsi:type="object">Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider\Delete</argument>
-            <argument name="pipelineConfigurationFilepath"
-                      xsi:type="string">Klevu_IndexingCms::etc/pipeline/delete.yml</argument>
+            <argument name="pipelineIdentifier" xsi:type="string">KLEVU_CMS::delete</argument>
+            <argument name="configurationOverridesHandler"
+                      xsi:type="object">Klevu\IndexingCms\Service\ConfigurationOverridesHandler\Delete</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\PipelineConfigurationOverridesFilepathsProvider\Update"
+                 type="Klevu\PlatformPipelines\Service\Provider\PipelineConfigurationOverridesFilepathsProvider">
+        <arguments>
+            <argument name="generatedConfigurationOverridesFilepathProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\GeneratedConfigurationOverridesFilepathProvider\AddUpdate</argument>
         </arguments>
     </virtualType>
 
@@ -155,8 +254,9 @@
         <arguments>
             <argument name="entityIndexingRecordProvider"
                       xsi:type="object">Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider\Update</argument>
-            <argument name="pipelineConfigurationFilepath"
-                      xsi:type="string">Klevu_IndexingCms::etc/pipeline/add_update.yml</argument>
+            <argument name="pipelineIdentifier" xsi:type="string">KLEVU_CMS::update</argument>
+            <argument name="configurationOverridesHandler"
+                      xsi:type="object">Klevu\IndexingCms\Service\ConfigurationOverridesHandler\AddUpdate</argument>
         </arguments>
     </virtualType>
 
@@ -182,4 +282,47 @@
         </arguments>
     </type>
 
+    <!-- Pipelines -->
+    <type name="Klevu\PlatformPipelines\ObjectManager\TransformerManager">
+        <arguments>
+            <argument name="namespaces" xsi:type="array">
+                <item name="\Klevu\IndexingCms\Pipeline\Transformer"
+                      xsi:type="const">Klevu\Pipelines\ObjectManager\ObjectManagerInterface::PRIORITY_NAMESPACE_SORT_ORDER</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Indexing\Console\Command\ConfigurationDumpPipelineCommand">
+        <arguments>
+            <argument name="entityIndexerServices" xsi:type="array">
+                <item name="KLEVU_CMS::add"
+                      xsi:type="object">Klevu\IndexingCms\Service\EntityIndexerService\Add</item>
+                <item name="KLEVU_CMS::delete"
+                      xsi:type="object">Klevu\IndexingCms\Service\EntityIndexerService\Delete</item>
+                <item name="KLEVU_CMS::update"
+                      xsi:type="object">Klevu\IndexingCms\Service\EntityIndexerService\Update</item>
+            </argument>
+            <argument name="configurationOverridesHandlers" xsi:type="array">
+                <item name="KLEVU_CMS" xsi:type="array">
+                    <item name="add_update"
+                          xsi:type="object">Klevu\IndexingCms\Service\ConfigurationOverridesHandler\AddUpdate</item>
+                    <item name="delete"
+                          xsi:type="object">Klevu\IndexingCms\Service\ConfigurationOverridesHandler\Delete</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Indexing\Console\Command\ConfigurationOverridesRegenerateCommand">
+        <arguments>
+            <argument name="configurationOverridesHandlers" xsi:type="array">
+                <item name="KLEVU_CMS" xsi:type="array">
+                    <item name="add_update"
+                          xsi:type="object">Klevu\IndexingCms\Service\ConfigurationOverridesHandler\AddUpdate\Force</item>
+                    <item name="delete"
+                          xsi:type="object">Klevu\IndexingCms\Service\ConfigurationOverridesHandler\Delete\Force</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

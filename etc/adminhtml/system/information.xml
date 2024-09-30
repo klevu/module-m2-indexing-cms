@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<!-- Copyright © Klevu Oy. All rights reserved. See LICENSE.txt for license details. -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="indexing">
+        <group id="pipeline_configuration">
+            <field id="klevu_cms_add"
+                   sortOrder="300"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <frontend_model>Klevu\IndexingCms\Block\Adminhtml\Config\Information\PipelineConfiguration\Cms\Add</frontend_model>
+            </field>
+            <field id="klevu_cms_delete"
+                   sortOrder="310"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <frontend_model>Klevu\IndexingCms\Block\Adminhtml\Config\Information\PipelineConfiguration\Cms\Delete</frontend_model>
+            </field>
+            <field id="klevu_cms_update"
+                   sortOrder="320"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <frontend_model>Klevu\IndexingCms\Block\Adminhtml\Config\Information\PipelineConfiguration\Cms\Update</frontend_model>
+            </field>
+        </group>
+    </group>
+</config>
