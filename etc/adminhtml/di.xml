@@ -31,4 +31,57 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="Klevu\IndexingCms\ViewModel\Config\Information\PipelineConfiguration\Cms\Add"
+                 type="Klevu\PlatformPipelines\ViewModel\Config\Information\PipelineConfiguration">
+        <arguments>
+            <argument name="pipelineIdentifier" xsi:type="string">KLEVU_CMS::add</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\ViewModel\Config\Information\PipelineConfiguration\Cms\Delete"
+                 type="Klevu\PlatformPipelines\ViewModel\Config\Information\PipelineConfiguration">
+        <arguments>
+            <argument name="pipelineIdentifier" xsi:type="string">KLEVU_CMS::delete</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\ViewModel\Config\Information\PipelineConfiguration\Cms\Update"
+                 type="Klevu\PlatformPipelines\ViewModel\Config\Information\PipelineConfiguration">
+        <arguments>
+            <argument name="pipelineIdentifier" xsi:type="string">KLEVU_CMS::update</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Block\Adminhtml\Config\Information\PipelineConfiguration\Cms\Add"
+                 type="Klevu\Configuration\Block\Adminhtml\Config\Form\KlevuFieldset">
+        <arguments>
+            <argument name="blockName" xsi:type="string">klevu_indexing_pipeline_configuration_cms_add</argument>
+            <argument name="template"
+                      xsi:type="string">Klevu_PlatformPipelines::system/config/information/pipeline_configuration.phtml</argument>
+            <argument name="viewModel"
+                      xsi:type="object">Klevu\IndexingCms\ViewModel\Config\Information\PipelineConfiguration\Cms\Add</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Block\Adminhtml\Config\Information\PipelineConfiguration\Cms\Delete"
+                 type="Klevu\Configuration\Block\Adminhtml\Config\Form\KlevuFieldset">
+        <arguments>
+            <argument name="blockName" xsi:type="string">klevu_indexing_pipeline_configuration_cms_delete</argument>
+            <argument name="template"
+                      xsi:type="string">Klevu_PlatformPipelines::system/config/information/pipeline_configuration.phtml</argument>
+            <argument name="viewModel"
+                      xsi:type="object">Klevu\IndexingCms\ViewModel\Config\Information\PipelineConfiguration\Cms\Delete</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Block\Adminhtml\Config\Information\PipelineConfiguration\Cms\Update"
+                 type="Klevu\Configuration\Block\Adminhtml\Config\Form\KlevuFieldset">
+        <arguments>
+            <argument name="blockName" xsi:type="string">klevu_indexing_pipeline_configuration_cms_update</argument>
+            <argument name="template"
+                      xsi:type="string">Klevu_PlatformPipelines::system/config/information/pipeline_configuration.phtml</argument>
+            <argument name="viewModel"
+                      xsi:type="object">Klevu\IndexingCms\ViewModel\Config\Information\PipelineConfiguration\Cms\Update</argument>
+        </arguments>
+    </virtualType>
 </config>

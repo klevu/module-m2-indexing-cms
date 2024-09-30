@@ -10,6 +10,7 @@ namespace Klevu\IndexingCms\Test\Integration\Service\Provider;
 
 use Klevu\Configuration\Service\Provider\ScopeProviderInterface;
 use Klevu\IndexingApi\Service\Provider\EntityProviderInterface;
+use Klevu\IndexingCms\Constants;
 use Klevu\IndexingCms\Service\Provider\CmsEntityProvider;
 use Klevu\TestFixtures\Cms\PageFixturesPool;
 use Klevu\TestFixtures\Cms\PageTrait;
@@ -298,7 +299,7 @@ class CmsEntityProviderTest extends TestCase
         $scopeProvider->setCurrentScope(scope: $storeFixture->get());
 
         ConfigFixture::setForStore(
-            path: 'klevu/indexing/enable_cms_sync',
+            path: Constants::XML_PATH_CMS_SYNC_ENABLED,
             value: 1,
             storeCode: $storeFixture->getCode(),
         );
@@ -345,7 +346,7 @@ class CmsEntityProviderTest extends TestCase
         $scopeProvider->setCurrentScope($storeFixture1->get());
 
         ConfigFixture::setForStore(
-            path: 'klevu/indexing/enable_cms_sync',
+            path: Constants::XML_PATH_CMS_SYNC_ENABLED,
             value: 0,
             storeCode: $storeFixture1->getCode(),
         );

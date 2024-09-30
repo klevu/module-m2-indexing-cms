@@ -118,7 +118,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->cleanIndexingEntities($apiKey);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityType: 'KLEVU_CMS', apiKeys: [$apiKey]);
+        $result = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
@@ -182,7 +182,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->cleanIndexingEntities($apiKey);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityType: 'KLEVU_CMS', apiKeys: [$apiKey]);
+        $result = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
@@ -262,7 +262,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->cleanIndexingEntities($apiKey);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityType: 'KLEVU_CMS', apiKeys: [$apiKey]);
+        $result = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
@@ -363,7 +363,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         ]);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityType: 'KLEVU_CMS', apiKeys: [$apiKey]);
+        $result = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
@@ -474,7 +474,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         ]);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityType: 'KLEVU_CMS', apiKeys: [$apiKey]);
+        $result = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
@@ -575,7 +575,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         ]);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityType: 'KLEVU_CMS');
+        $result = $service->execute(entityTypes: ['KLEVU_CMS']);
         $this->assertTrue($result->isSuccess());
 
         $collection = $this->objectManager->create(Collection::class);
@@ -626,7 +626,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         );
         $this->cleanIndexingEntities($apiKey);
     }
-    
+
     /**
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
@@ -742,7 +742,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         ]);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityType: 'KLEVU_CMS');
+        $result = $service->execute(entityTypes: ['KLEVU_CMS']);
         $this->assertTrue($result->isSuccess());
 
         $collection = $this->objectManager->create(Collection::class);

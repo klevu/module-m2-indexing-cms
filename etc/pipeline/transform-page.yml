@@ -41,11 +41,20 @@ stages:
           -
             pipeline: Stage\Extract
             args:
-              extraction: currentPage::getIdentifier()
-              transformations: Prepend($store::getForCurrentStore().base_url)
+              extraction: currentPage::
+              transformations:
+                - ToPageUrl
       visibility:
         stages:
           -
             pipeline: Stage\StaticValue
             args:
               value: ["search"]
+      createdAt:
+        stages:
+          getCreatedAt:
+            pipeline: Stage\Extract
+            args:
+              extraction: currentPage::getCreationTime()
+              transformations:
+                - ToDateString("Y-m-d\TH:i:s.v\Z")

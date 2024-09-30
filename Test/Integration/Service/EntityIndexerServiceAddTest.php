@@ -16,6 +16,7 @@ use Klevu\Indexing\Test\Integration\Traits\IndexingEntitiesTrait;
 use Klevu\IndexingApi\Model\Source\Actions;
 use Klevu\IndexingApi\Model\Source\IndexerResultStatuses;
 use Klevu\IndexingApi\Service\EntityIndexerServiceInterface;
+use Klevu\IndexingCategories\Constants;
 use Klevu\IndexingCms\Service\EntityIndexerService\Add as EntityIndexerServiceVirtualType;
 use Klevu\PhpSDK\Model\Indexing\RecordIterator;
 use Klevu\PhpSDKPipelines\Model\ApiPipelineResult;
@@ -29,6 +30,7 @@ use Klevu\TestFixtures\Traits\PipelineEntityApiCallTrait;
 use Klevu\TestFixtures\Traits\SetAuthKeysTrait;
 use Klevu\TestFixtures\Traits\TestImplementsInterfaceTrait;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use TddWizard\Fixtures\Core\ConfigFixture;
@@ -203,7 +205,7 @@ class EntityIndexerServiceAddTest extends TestCase
         );
 
         ConfigFixture::setForStore(
-            path: 'klevu/indexing/enable_category_sync',
+            path: Constants::XML_PATH_CATEGORY_SYNC_ENABLED,
             value: 0,
             storeCode: $storeFixture->getCode(),
         );
@@ -381,6 +383,10 @@ class EntityIndexerServiceAddTest extends TestCase
         ConfigFixture::setGlobal(
             path: BaseUrlsProvider::CONFIG_XML_PATH_URL_TIERS,
             value: $tiersApiUrl,
+        );
+        ConfigFixture::setGlobal(
+            path: Store::XML_PATH_UNSECURE_BASE_LINK_URL,
+            value: 'https://magento.test/',
         );
 
         $this->createPage();

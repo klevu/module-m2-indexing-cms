@@ -99,6 +99,7 @@ class EntityUpdateResponderService implements EntityUpdateResponderServiceInterf
                 Entity::STORE_IDS => $data[Entity::STORE_IDS] ?? [],
                 Entity::CUSTOMER_GROUP_IDS => $data[Entity::CUSTOMER_GROUP_IDS] ?? [],
                 Entity::ATTRIBUTES => $data[static::CHANGED_ATTRIBUTES] ?? [],
+                Entity::ENTITY_SUBTYPES => $data[Entity::ENTITY_SUBTYPES] ?? [],
             ],
         ]);
     }

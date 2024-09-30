@@ -10,9 +10,9 @@ namespace Klevu\IndexingCms\Service\Provider;
 
 use Klevu\Configuration\Service\Provider\ScopeConfigProviderInterface;
 use Klevu\IndexingApi\Service\Provider\EntityProviderInterface;
+use Klevu\IndexingCms\Model\ResourceModel\Page\Collection as PageCollection;
+use Klevu\IndexingCms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Cms\Model\ResourceModel\Page\Collection as PageCollection;
-use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Api\Data\StoreInterface;
