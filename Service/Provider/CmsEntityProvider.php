@@ -42,6 +42,10 @@ class CmsEntityProvider implements EntityProviderInterface
      * @var string
      */
     private readonly string $entitySubtype;
+    /**
+     * @var int|null
+     */
+    private readonly ?int $batchSize;
 
     /**
      * @param PageCollectionFactory $pageCollectionFactory
@@ -49,6 +53,7 @@ class CmsEntityProvider implements EntityProviderInterface
      * @param LoggerInterface $logger
      * @param ScopeConfigProviderInterface $syncEnabledProvider
      * @param string $entitySubtype
+     * @param int|null $batchSize
      */
     public function __construct(
         PageCollectionFactory $pageCollectionFactory,
@@ -56,19 +61,21 @@ class CmsEntityProvider implements EntityProviderInterface
         LoggerInterface $logger,
         ScopeConfigProviderInterface $syncEnabledProvider,
         string $entitySubtype = self::ENTITY_SUBTYPE_CMS_PAGE,
+        ?int $batchSize = null,
     ) {
         $this->pageCollectionFactory = $pageCollectionFactory;
         $this->metadataPool = $metadataPool;
         $this->logger = $logger;
         $this->syncEnabledProvider = $syncEnabledProvider;
         $this->entitySubtype = $entitySubtype;
+        $this->batchSize = $batchSize;
     }
 
     /**
      * @param StoreInterface|null $store
      * @param int[]|null $entityIds
      *
-     * @return \Generator|null
+     * @return \Generator<PageInterface[]>|null
      * @throws \LogicException
      */
     public function get(?StoreInterface $store = null, ?array $entityIds = []): ?\Generator
@@ -76,10 +83,60 @@ class CmsEntityProvider implements EntityProviderInterface
         if (!$this->syncEnabledProvider->get()) {
             return null;
         }
+        $currentEntityId = 0;
+        while (true) {
+            $pageCollection = $this->getPageCollection(
+                store: $store,
+                entityIds: $entityIds,
+                pageSize: $this->batchSize,
+                currentEntityId: $currentEntityId + 1,
+            );
+            if (!$pageCollection->getSize()) {
+                break;
+            }
+            /** @var PageInterface[] $pages */
+            $pages = $pageCollection->getItems();
+            yield $pages;
+            $lastPage = array_pop($pages);
+            $currentEntityId = $lastPage->getId();
+            if (null === $this->batchSize || $pageCollection->getSize() < $this->batchSize) {
+                break;
+            }
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntitySubtype(): string
+    {
+        return $this->entitySubtype;
+    }
+
+    /**
+     * @param StoreInterface|null $store
+     * @param int[]|null $entityIds
+     * @param int|null $pageSize
+     * @param int $currentEntityId
+     *
+     * @return PageCollection
+     */
+    private function getPageCollection(
+        ?StoreInterface $store,
+        ?array $entityIds,
+        ?int $pageSize = null,
+        int $currentEntityId = 1,
+    ): PageCollection {
+        // @TODO extract to own class
         $linkField = $this->getLinkField();
         /** @var PageCollection $pageCollection */
         $pageCollection = $this->pageCollectionFactory->create();
         $pageCollection->addFieldToSelect(field: '*');
+        if (null !== $pageSize) {
+            $pageCollection->setPageSize($pageSize);
+            $pageCollection->addFieldToFilter(PageInterface::PAGE_ID, ['gteq' => $currentEntityId]);
+        }
+        $pageCollection->setOrder(PageInterface::PAGE_ID, Select::SQL_ASC);
         if ($store) {
             $connection = $pageCollection->getConnection();
             $select = $pageCollection->getSelect();
@@ -107,17 +164,7 @@ class CmsEntityProvider implements EntityProviderInterface
         }
         $this->logQuery($pageCollection);
 
-        foreach ($pageCollection as $page) {
-            yield $page;
-        }
-    }
-
-    /**
-     * @return string
-     */
-    public function getEntitySubtype(): string
-    {
-        return $this->entitySubtype;
+        return $pageCollection;
     }
 
     /**

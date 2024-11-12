@@ -11,7 +11,7 @@ namespace Klevu\IndexingProducts\Test\Integration\Observer\Admin\System\Config;
 use Klevu\IndexingApi\Service\Action\CreateCronScheduleActionInterface;
 use Klevu\IndexingCms\Constants;
 use Klevu\IndexingCms\Observer\Admin\System\Config\UpdateCmsSyncSettingsObserver;
-use Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableDeterminer;
+use Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableCondition;
 use Klevu\TestFixtures\Store\StoreFixturesPool;
 use Klevu\TestFixtures\Store\StoreTrait;
 use Klevu\TestFixtures\Traits\ObjectInstantiationTrait;
@@ -144,7 +144,7 @@ class UpdateCmsSyncSettingsObserverTest extends TestCase
             'data' => [
                 'changed_paths' => [
                     Constants::XML_PATH_CMS_SYNC_ENABLED,
-                    DisabledPagesIsIndexableDeterminer::XML_PATH_EXCLUDE_DISABLED_CMS,
+                    DisabledPagesIsIndexableCondition::XML_PATH_EXCLUDE_DISABLED_CMS,
                 ],
             ],
         ]);

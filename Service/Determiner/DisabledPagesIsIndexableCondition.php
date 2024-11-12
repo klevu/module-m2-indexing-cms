@@ -9,14 +9,14 @@ declare(strict_types=1);
 namespace Klevu\IndexingCms\Service\Determiner;
 
 use Klevu\Configuration\Service\Provider\ScopeProviderInterface;
-use Klevu\IndexingApi\Service\Determiner\IsIndexableDeterminerInterface;
+use Klevu\IndexingApi\Service\Determiner\IsIndexableConditionInterface;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Psr\Log\LoggerInterface;
 
-class DisabledPagesIsIndexableDeterminer implements IsIndexableDeterminerInterface
+class DisabledPagesIsIndexableCondition implements IsIndexableConditionInterface
 {
     public const XML_PATH_EXCLUDE_DISABLED_CMS = 'klevu/indexing/exclude_disabled_cms';
 

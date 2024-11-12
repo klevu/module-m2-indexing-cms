@@ -8,9 +8,9 @@
     <virtualType name="Klevu\IndexingCms\Service\Determiner\IsIndexableDeterminer"
                  type="Klevu\Indexing\Service\Determiner\IsIndexableDeterminer">
         <arguments>
-            <argument name="isIndexableDeterminers" xsi:type="array">
-                <item name="DisabledPagesIsIndexableDeterminer"
-                      xsi:type="object">Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableDeterminer</item>
+            <argument name="isIndexableConditions" xsi:type="array">
+                <item name="DisabledPagesIsIndexableCondition"
+                      xsi:type="object">Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableCondition</item>
             </argument>
         </arguments>
     </virtualType>
@@ -32,29 +32,48 @@
         </arguments>
     </type>
 
-    <virtualType name="Klevu\IndexingCms\Service\Provider\EntityDiscoveryProvider"
-                 type="Klevu\Indexing\Service\Provider\EntityDiscoveryProvider">
+    <virtualType name="Klevu\IndexingCms\Service\Provider\EntityProviderProvider"
+                 type="Klevu\Indexing\Service\Provider\EntityProviderProvider">
         <arguments>
-            <argument name="entityType" xsi:type="string">KLEVU_CMS</argument>
             <argument name="entityProviders" xsi:type="array">
                 <item name="cms"
                       xsi:type="object">Klevu\IndexingCms\Service\Provider\CmsEntityProvider</item>
             </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\EntityDiscoveryProvider"
+                 type="Klevu\Indexing\Service\Provider\EntityDiscoveryProvider">
+        <arguments>
+            <argument name="entityType" xsi:type="string">KLEVU_CMS</argument>
+            <argument name="entityProviderProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\EntityProviderProvider</argument>
             <argument name="isIndexableDeterminer"
                       xsi:type="object">Klevu\IndexingCms\Service\Determiner\IsIndexableDeterminer</argument>
+            <!-- CMS pages can be excluded from stores, therefore this flag is required -->
+            <argument name="isCheckIsIndexableAtStoreScope" xsi:type="boolean">true</argument>
         </arguments>
     </virtualType>
 
     <type name="Klevu\Indexing\Service\EntityDiscoveryOrchestratorService">
         <arguments>
             <argument name="discoveryProviders" xsi:type="array">
-                <item name="cms"
+                <item name="KLEVU_CMS"
                       xsi:type="object">Klevu\IndexingCms\Service\Provider\EntityDiscoveryProvider</item>
             </argument>
         </arguments>
     </type>
 
-    <type name="Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableDeterminer">
+    <type name="Klevu\Indexing\Service\FilterEntitiesToDeleteService">
+        <arguments>
+            <argument name="discoveryProviders" xsi:type="array">
+                <item name="KLEVU_CMS"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\EntityDiscoveryProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableCondition">
         <arguments>
             <argument name="logger" xsi:type="object">Klevu\Indexing\Logger\Logger</argument>
         </arguments>
@@ -99,10 +118,8 @@
     <virtualType name="Klevu\IndexingCms\Service\Provider\Sync\EntityIndexingRecordProvider"
                  type="Klevu\Indexing\Service\Provider\Sync\EntityIndexingRecordProvider">
         <arguments>
-            <argument name="entityProviders" xsi:type="array">
-                <item name="cms"
-                      xsi:type="object">Klevu\IndexingCms\Service\Provider\CmsEntityProvider</item>
-            </argument>
+            <argument name="entityProviderProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\EntityProviderProvider</argument>
             <argument name="indexingRecordCreatorService"
                       xsi:type="object">Klevu\IndexingCms\Service\EntityIndexingRecordCreatorService</argument>
             <argument name="entityType" xsi:type="string">KLEVU_CMS</argument>

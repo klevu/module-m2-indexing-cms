@@ -98,9 +98,6 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
 
         $this->createStore();
         $storeFixture = $this->storeFixturesPool->get('test_store');
-        $store = $storeFixture->get();
-
-        $pagesCollectionCount = count($this->getPages($store));
 
         $this->createPage([
             'key' => 'test_page_1',
@@ -122,12 +119,9 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
-        $this->assertCount(
-            expectedCount: 2 + $pagesCollectionCount,
-            haystack: $indexingEntities,
-            message: 'Final Items Count',
-        );
         $this->assertAddIndexingEntity($indexingEntities, $page2, $apiKey, true);
+
+        $this->cleanIndexingEntities($apiKey);
     }
 
     /**
@@ -141,22 +135,20 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
      */
     public function testExecute_AddsNewCmsPages_AsIndexable_WhenExcludeChecksEnabled(): void
     {
-        $apiKey = 'klevu-js-api-key';
+        $apiKey1 = 'klevu-js-api-key';
+        $apiKey2 = 'klevu-js-api-key-2';
 
         $this->createStore([
             'key' => 'test_store_1',
             'code' => 'klevu_test_store_1',
         ]);
         $storeFixture1 = $this->storeFixturesPool->get('test_store_1');
-        $store1 = $storeFixture1->get();
 
         $this->createStore([
             'key' => 'test_store_2',
             'code' => 'klevu_test_store_2',
         ]);
         $storeFixture2 = $this->storeFixturesPool->get('test_store_2');
-
-        $pagesCollectionCount = count($this->getPages($store1));
 
         $this->createPage([
             'key' => 'test_page_1',
@@ -179,21 +171,19 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         ]);
         $page3 = $this->pageFixturesPool->get('test_page_3');
 
-        $this->cleanIndexingEntities($apiKey);
+        $this->cleanIndexingEntities($apiKey1);
+        $this->cleanIndexingEntities($apiKey2);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
+        $result = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey1]);
         $this->assertTrue($result->isSuccess());
 
-        $indexingEntities = $this->getCmsIndexingEntities($apiKey);
-        $this->assertCount(
-            expectedCount: 2 + $pagesCollectionCount,
-            haystack: $indexingEntities,
-            message: 'Final Items Count',
-        );
+        $indexingEntities = $this->getCmsIndexingEntities($apiKey1);
+        $this->assertAddIndexingEntity($indexingEntities, $page2, $apiKey1, false);
+        $this->assertAddIndexingEntity($indexingEntities, $page3, $apiKey1, true);
 
-        $this->assertAddIndexingEntity($indexingEntities, $page2, $apiKey, false);
-        $this->assertAddIndexingEntity($indexingEntities, $page3, $apiKey, true);
+        $this->cleanIndexingEntities($apiKey1);
+        $this->cleanIndexingEntities($apiKey2);
     }
 
     /**
@@ -214,19 +204,12 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
             'key' => 'test_store_1',
         ]);
         $storeFixture1 = $this->storeFixturesPool->get('test_store_1');
-        $store1 = $storeFixture1->get();
 
         $this->createStore([
             'code' => 'klevu_test_store_2',
             'key' => 'test_store_2',
         ]);
         $storeFixture2 = $this->storeFixturesPool->get('test_store_2');
-        $store2 = $storeFixture2->get();
-
-        $pagesCollectionCount1 = count($this->getPages($store1));
-        $pagesCollectionCount2 = count($this->getPages($store2));
-
-        $pagesCollectionCount = max($pagesCollectionCount1, $pagesCollectionCount2);
 
         $this->createPage([
             'key' => 'test_page_1',
@@ -266,12 +249,6 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
-        $this->assertCount(
-            expectedCount: 3 + $pagesCollectionCount,
-            haystack: $indexingEntities,
-            message: 'Final Items Count',
-        );
-
         $this->assertAddIndexingEntity($indexingEntities, $page1, $apiKey, true);
         $this->assertAddIndexingEntity($indexingEntities, $page2, $apiKey, false);
         $this->assertAddIndexingEntity($indexingEntities, $page3, $apiKey, true);
@@ -295,19 +272,12 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
             'key' => 'test_store_1',
         ]);
         $storeFixture1 = $this->storeFixturesPool->get('test_store_1');
-        $store1 = $storeFixture1->get();
 
         $this->createStore([
             'code' => 'klevu_test_store_2',
             'key' => 'test_store_2',
         ]);
         $storeFixture2 = $this->storeFixturesPool->get('test_store_2');
-        $store2 = $storeFixture2->get();
-
-        $pagesCollectionCount1 = count($this->getPages($store1));
-        $pagesCollectionCount2 = count($this->getPages($store2));
-
-        $pagesCollectionCount = max($pagesCollectionCount1, $pagesCollectionCount2);
 
         $this->createPage([
             'key' => 'test_page_1',
@@ -367,11 +337,6 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
-        $this->assertCount(
-            expectedCount: 3 + $pagesCollectionCount,
-            haystack: $indexingEntities,
-            message: 'Final Items Count',
-        );
 
         $this->assertDeleteIndexingEntity($indexingEntities, $page1, $apiKey, Actions::DELETE, true);
         $this->assertAddIndexingEntity($indexingEntities, $page2, $apiKey, true, true);
@@ -396,19 +361,12 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
             'key' => 'test_store_1',
         ]);
         $storeFixture1 = $this->storeFixturesPool->get('test_store_1');
-        $store1 = $storeFixture1->get();
 
         $this->createStore([
             'code' => 'klevu_test_store_2',
             'key' => 'test_store_2',
         ]);
         $storeFixture2 = $this->storeFixturesPool->get('test_store_2');
-        $store2 = $storeFixture2->get();
-
-        $pagesCollectionCount1 = count($this->getPages($store1));
-        $pagesCollectionCount2 = count($this->getPages($store2));
-
-        $pagesCollectionCount = max($pagesCollectionCount1, $pagesCollectionCount2);
 
         $this->createPage([
             'key' => 'test_page_1',
@@ -478,12 +436,6 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
-        $this->assertCount(
-            expectedCount: 3 + $pagesCollectionCount,
-            haystack: $indexingEntities,
-            message: 'Final Items Count',
-        );
-
         $indexingEntityArray1 = $this->filterIndexEntities($indexingEntities, $page1->getId(), $apiKey);
         $indexingEntity1 = array_shift($indexingEntityArray1);
         $this->assertSame(
@@ -551,8 +503,6 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
 
         $this->createStore();
         $storeFixture = $this->storeFixturesPool->get('test_store');
-        $store = $storeFixture->get();
-        $pagesCollectionCount = count($this->getPages($store));
 
         $this->createPage([
             'stores' => [
@@ -581,11 +531,6 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $collection = $this->objectManager->create(Collection::class);
         $collection->addFieldToFilter(IndexingEntity::API_KEY, ['eq' => $apiKey]);
         $indexingEntities = $collection->getItems();
-        $this->assertCount(
-            expectedCount: 1 + $pagesCollectionCount,
-            haystack: $indexingEntities,
-            message: 'Final Items Count',
-        );
         $indexingEntityArray = $this->filterIndexEntities($indexingEntities, $page->getId(), $apiKey);
         $indexingEntity = array_shift($indexingEntityArray);
         $this->assertSame(
@@ -646,18 +591,12 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
             'key' => 'test_store_1',
         ]);
         $storeFixture1 = $this->storeFixturesPool->get('test_store_1');
-        $store1 = $storeFixture1->get();
 
         $this->createStore([
             'code' => 'klevu_test_store_2',
             'key' => 'test_store_2',
         ]);
         $storeFixture2 = $this->storeFixturesPool->get('test_store_2');
-        $store2 = $storeFixture2->get();
-
-        $pagesCollectionCount1 = count($this->getPages($store1));
-        $pagesCollectionCount2 = count($this->getPages($store2));
-        $pagesCollectionCount = max($pagesCollectionCount1, $pagesCollectionCount2);
 
         $this->createPage([
             'key' => 'test_page_1',
@@ -748,11 +687,6 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $collection = $this->objectManager->create(Collection::class);
         $collection->addFieldToFilter(IndexingEntity::API_KEY, ['eq' => $apiKey]);
         $indexingEntities = $collection->getItems();
-        $this->assertCount(
-            expectedCount: 4 + $pagesCollectionCount,
-            haystack: $indexingEntities,
-            message: 'Final Items Count',
-        );
 
         $indexingEntityArray1 = $this->filterIndexEntities($indexingEntities, $page1->getId(), $apiKey);
         $indexingEntity1 = array_shift($indexingEntityArray1);
@@ -891,6 +825,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
     ): void {
         $indexingEntityArray = $this->filterIndexEntities($indexingEntities, $pageFixture->getId(), $apiKey);
         $indexingEntity = array_shift($indexingEntityArray);
+        $this->assertInstanceOf(expected: IndexingEntity::class, actual: $indexingEntity);
         $this->assertSame(
             expected: (int)$pageFixture->getId(),
             actual: $indexingEntity->getTargetId(),

@@ -99,11 +99,13 @@ class CmsPageDeleteObserverTest extends TestCase
      */
     public function testDeletedCmsPage_NewIndexingEntityIsSetToNotIndexable(): void
     {
+        $apiKey = 'klevu-js-api-key';
         $this->createStore();
         $storeFixture = $this->storeFixturesPool->get('test_store');
         $scopeProvider = $this->objectManager->get(ScopeProviderInterface::class);
         $scopeProvider->setCurrentScope(scope: $storeFixture->get());
 
+        $this->cleanIndexingEntities(apiKey: $apiKey);
         $this->createPage([
             'store_id' => $storeFixture->getId(),
         ]);
@@ -116,7 +118,7 @@ class CmsPageDeleteObserverTest extends TestCase
 
         $collection = $this->objectManager->create(Collection::class);
         $collection->addFieldToFilter(IndexingEntity::TARGET_ID, ['eq' => $pageFixture->getId()]);
-        $collection->addFieldToFilter(IndexingEntity::API_KEY, ['eq' => 'klevu-js-api-key']);
+        $collection->addFieldToFilter(IndexingEntity::API_KEY, ['eq' => $apiKey]);
         $collection->addFieldToFilter(IndexingEntity::TARGET_ENTITY_TYPE, ['eq' => 'KLEVU_CMS']);
         $collection->addFieldToFilter(IndexingEntity::TARGET_PARENT_ID, ['null' => null]);
         $indexingEntities = $collection->getItems();
@@ -156,6 +158,7 @@ class CmsPageDeleteObserverTest extends TestCase
         $this->createIndexingEntity([
             IndexingEntity::TARGET_ID => $pageFixture->getId(),
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::NEXT_ACTION => Actions::NO_ACTION,
             IndexingEntity::LAST_ACTION => Actions::ADD,

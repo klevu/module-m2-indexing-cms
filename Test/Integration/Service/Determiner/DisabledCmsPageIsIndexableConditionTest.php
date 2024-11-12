@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Klevu\IndexingCms\Test\Integration\Service\Determiner;
 
-use Klevu\IndexingApi\Service\Determiner\IsIndexableDeterminerInterface;
-use Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableDeterminer;
+use Klevu\IndexingApi\Service\Determiner\IsIndexableConditionInterface;
+use Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableCondition;
 use Klevu\TestFixtures\Cms\PageFixturesPool;
 use Klevu\TestFixtures\Cms\PageTrait;
 use Klevu\TestFixtures\Store\StoreFixturesPool;
@@ -23,11 +23,11 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableDeterminer::class
- * @method IsIndexableDeterminerInterface instantiateTestObject(?array $arguments = null)
- * @method IsIndexableDeterminerInterface instantiateTestObjectFromInterface(?array $arguments = null)
+ * @covers \Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableCondition::class
+ * @method IsIndexableConditionInterface instantiateTestObject(?array $arguments = null)
+ * @method IsIndexableConditionInterface instantiateTestObjectFromInterface(?array $arguments = null)
  */
-class DisabledCmsPageIsIndexableDeterminerTest extends TestCase
+class DisabledCmsPageIsIndexableConditionTest extends TestCase
 {
     use ObjectInstantiationTrait;
     use PageTrait;
@@ -46,8 +46,8 @@ class DisabledCmsPageIsIndexableDeterminerTest extends TestCase
     {
         parent::setUp();
 
-        $this->implementationFqcn = DisabledPagesIsIndexableDeterminer::class;
-        $this->interfaceFqcn = IsIndexableDeterminerInterface::class;
+        $this->implementationFqcn = DisabledPagesIsIndexableCondition::class;
+        $this->interfaceFqcn = IsIndexableConditionInterface::class;
         $this->objectManager = Bootstrap::getObjectManager();
         $this->storeFixturesPool = $this->objectManager->get(StoreFixturesPool::class);
         $this->pageFixturesPool = $this->objectManager->get(PageFixturesPool::class);

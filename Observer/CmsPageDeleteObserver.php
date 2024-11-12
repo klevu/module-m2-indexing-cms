@@ -12,6 +12,7 @@ use Klevu\Indexing\Model\Update\Entity;
 use Klevu\IndexingApi\Service\EntityUpdateResponderServiceInterface;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page;
+use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -32,7 +33,7 @@ class CmsPageDeleteObserver implements ObserverInterface
     /**
      * @var LoggerInterface
      */
-    private readonly LoggerInterface $logger;
+    private readonly LoggerInterface $logger; // @phpstan-ignore-line
 
     /**
      * @param EntityUpdateResponderServiceInterface $responderService
@@ -94,21 +95,13 @@ class CmsPageDeleteObserver implements ObserverInterface
      */
     private function getStoreIdsFromPage(PageInterface $page): array
     {
-        if (!method_exists($page, 'getStoreId')) {
-            $this->logger->error(
-                message: 'Method: {method}, Error: {message}',
-                context: [
-                    'method' => __METHOD__,
-                    'message' => sprintf(
-                        'Method getStoreId does not exist on %s.',
-                        get_debug_type($page),
-                    ),
-                ],
-            );
-
+        /** @var PageInterface&DataObject $page */
+        $storeId = method_exists($page, 'getStoreId')
+            ? $page->getStoreId()
+            : $page->getData('store_id');
+        if (!$storeId) {
             return [];
         }
-        $storeId = $page->getStoreId();
 
         return is_array($storeId)
             ? array_map(
