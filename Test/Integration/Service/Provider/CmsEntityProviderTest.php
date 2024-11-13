@@ -108,14 +108,16 @@ class CmsEntityProviderTest extends TestCase
             $pages[] = $searchResult;
         }
 
-        $filteredPages1 = array_filter($pages, static function (PageInterface $page) use ($page1) {
-            return $page->getIdentifier() === $page1->getIdentifier();
-        });
+        $filteredPages1 = array_filter(
+            $pages[0],
+            static fn (PageInterface $page): bool => $page->getIdentifier() === $page1->getIdentifier(),
+        );
         $this->assertCount(1, $filteredPages1);
 
-        $filteredPages2 = array_filter($pages, static function (PageInterface $page) use ($page2) {
-            return $page->getIdentifier() === $page2->getIdentifier();
-        });
+        $filteredPages2 = array_filter(
+            $pages[0],
+            static fn (PageInterface $page): bool => $page->getIdentifier() === $page2->getIdentifier(),
+        );
         $this->assertCount(1, $filteredPages2);
     }
 
@@ -167,14 +169,16 @@ class CmsEntityProviderTest extends TestCase
             $pages[] = $searchResult;
         }
 
-        $filteredPages1 = array_filter($pages, static function (PageInterface $page) use ($page1) {
-            return $page->getIdentifier() === $page1->getIdentifier();
-        });
+        $filteredPages1 = array_filter(
+            $pages[0],
+            static fn (PageInterface $page): bool => $page->getIdentifier() === $page1->getIdentifier(),
+        );
         $this->assertCount(1, $filteredPages1);
 
-        $filteredPages2 = array_filter($pages, static function (PageInterface $page) use ($page2) {
-            return $page->getIdentifier() === $page2->getIdentifier();
-        });
+        $filteredPages2 = array_filter(
+            $pages[0],
+            static fn (PageInterface $page): bool => $page->getIdentifier() === $page2->getIdentifier(),
+        );
         $this->assertCount(0, $filteredPages2);
     }
 
@@ -215,14 +219,16 @@ class CmsEntityProviderTest extends TestCase
             $pages[] = $searchResult;
         }
 
-        $filteredPages1 = array_filter($pages, static function (PageInterface $page) use ($page1) {
-            return $page->getIdentifier() === $page1->getIdentifier();
-        });
+        $filteredPages1 = array_filter(
+            $pages[0],
+            static fn (PageInterface $page): bool => $page->getIdentifier() === $page1->getIdentifier(),
+        );
         $this->assertCount(1, $filteredPages1);
 
-        $filteredPages2 = array_filter($pages, static function (PageInterface $page) use ($page2) {
-            return $page->getIdentifier() === $page2->getIdentifier();
-        });
+        $filteredPages2 = array_filter(
+            $pages[0],
+            static fn (PageInterface $page): bool => $page->getIdentifier() === $page2->getIdentifier(),
+        );
         $this->assertCount(0, $filteredPages2);
     }
 
@@ -257,7 +263,6 @@ class CmsEntityProviderTest extends TestCase
                 $storeFixture1->getId(),
             ],
         ]);
-        $page1 = $this->pageFixturesPool->get('test_page_1');
         $this->createPage([
             'key' => 'test_page_2',
             'identifier' => 'test-page-2',
@@ -279,15 +284,7 @@ class CmsEntityProviderTest extends TestCase
             $pages[] = $searchResult;
         }
 
-        $filteredPages1 = array_filter($pages, static function (PageInterface $page) use ($page1) {
-            return $page->getIdentifier() === $page1->getIdentifier();
-        });
-        $this->assertCount(0, $filteredPages1);
-
-        $filteredPages2 = array_filter($pages, static function (PageInterface $page) use ($page2) {
-            return $page->getIdentifier() === $page2->getIdentifier();
-        });
-        $this->assertCount(0, $filteredPages2);
+        $this->assertCount(expectedCount: 0, haystack: $pages);
     }
 
     public function testGet_ThrowsLogicException_WhenMetadataPoolThrowsException(): void

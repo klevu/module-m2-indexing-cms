@@ -258,6 +258,7 @@ class EntityIndexerServiceDeleteTest extends TestCase
         $this->cleanIndexingEntities(apiKey: $apiKey);
         $this->createIndexingEntity([
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ID => $pageFixture->getId(),
             IndexingEntity::NEXT_ACTION => Actions::NO_ACTION,

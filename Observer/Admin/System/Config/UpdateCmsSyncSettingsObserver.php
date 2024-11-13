@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Klevu\IndexingCms\Observer\Admin\System\Config;
 
 use Klevu\IndexingApi\Service\Action\CreateCronScheduleActionInterface;
-use Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableDeterminer;
+use Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableCondition;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -38,7 +38,7 @@ class UpdateCmsSyncSettingsObserver implements ObserverInterface
         $changedPaths = (array)$observer->getData('changed_paths');
         if (
             !in_array(
-                needle: DisabledPagesIsIndexableDeterminer::XML_PATH_EXCLUDE_DISABLED_CMS,
+                needle: DisabledPagesIsIndexableCondition::XML_PATH_EXCLUDE_DISABLED_CMS,
                 haystack: $changedPaths,
                 strict: true,
             )
