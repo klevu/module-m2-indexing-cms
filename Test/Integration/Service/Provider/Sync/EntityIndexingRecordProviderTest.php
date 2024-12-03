@@ -108,19 +108,21 @@ class EntityIndexingRecordProviderTest extends TestCase
 
         /** @var EntityIndexingRecordInterface[] $result */
         $result = [];
-        foreach ($generator as $indexingRecord) {
-            $result[] = $indexingRecord;
+        foreach ($generator as $indexingRecords) {
+            $result[] = $indexingRecords;
         }
         $this->assertCount(expectedCount: 1, haystack: $result);
+        $this->assertCount(expectedCount: 1, haystack: $result[0]);
+        $indexingRecord = $result[0][0] ?? null;
         $this->assertSame(
             expected: $indexingEntity->getId(),
-            actual: $result[0]->getRecordId(),
+            actual: $indexingRecord->getRecordId(),
         );
         $this->assertSame(
             expected: (int)$pageFixture->getId(),
-            actual: (int)$result[0]->getEntity()->getId(),
+            actual: (int)$indexingRecord->getEntity()->getId(),
         );
-        $this->assertNull(actual: $result[0]->getParent());
+        $this->assertNull(actual: $indexingRecord->getParent());
 
         $this->cleanIndexingEntities(apiKey: $apiKey);
     }

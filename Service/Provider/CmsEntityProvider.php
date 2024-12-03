@@ -9,10 +9,13 @@ declare(strict_types=1);
 namespace Klevu\IndexingCms\Service\Provider;
 
 use Klevu\Configuration\Service\Provider\ScopeConfigProviderInterface;
+use Klevu\Indexing\Validator\BatchSizeValidator;
 use Klevu\IndexingApi\Service\Provider\EntityProviderInterface;
+use Klevu\IndexingApi\Validator\ValidatorInterface;
 use Klevu\IndexingCms\Model\ResourceModel\Page\Collection as PageCollection;
 use Klevu\IndexingCms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Api\Data\StoreInterface;
@@ -54,6 +57,9 @@ class CmsEntityProvider implements EntityProviderInterface
      * @param ScopeConfigProviderInterface $syncEnabledProvider
      * @param string $entitySubtype
      * @param int|null $batchSize
+     * @param ValidatorInterface|null $batchSizeValidator
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         PageCollectionFactory $pageCollectionFactory,
@@ -62,12 +68,24 @@ class CmsEntityProvider implements EntityProviderInterface
         ScopeConfigProviderInterface $syncEnabledProvider,
         string $entitySubtype = self::ENTITY_SUBTYPE_CMS_PAGE,
         ?int $batchSize = null,
+        ?ValidatorInterface $batchSizeValidator = null,
     ) {
         $this->pageCollectionFactory = $pageCollectionFactory;
         $this->metadataPool = $metadataPool;
         $this->logger = $logger;
         $this->syncEnabledProvider = $syncEnabledProvider;
         $this->entitySubtype = $entitySubtype;
+
+        $objectManager = ObjectManager::getInstance();
+        $batchSizeValidator = $batchSizeValidator ?: $objectManager->get(BatchSizeValidator::class);
+        if (!$batchSizeValidator->isValid($batchSize)) {
+            throw new \InvalidArgumentException(
+                message: sprintf(
+                    'Invalid Batch Size: %s',
+                    implode(', ', $batchSizeValidator->getMessages()),
+                ),
+            );
+        }
         $this->batchSize = $batchSize;
     }
 

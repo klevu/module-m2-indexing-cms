@@ -3,53 +3,58 @@ stages:
     pipeline: Indexing\Stage\Log
     args:
       message: "Start Add CMS Pipeline"
-  iteratePages:
-    pipeline: Pipeline\Iterate
+  iterateIndexingRecordsBatch:
+    pipeline: Pipeline\Iterate # LOOP OVER ALL PROVIDED BATCHES
     args:
       continueOnException: ~
     stages:
-      processIndexingRecordStart:
+      iteratePages:
+        pipeline: Pipeline\Iterate
+        args:
+          continueOnException: ~
         stages:
-          registerIndexingRecordToContext:
-            pipeline: Stage\RegisterContext
-            args:
-              contextKey: "currentIndexingRecord"
-          registerPageToContext:
+          processIndexingRecordStart:
             stages:
-              extractCategory:
-                pipeline: Stage\Extract
-                args:
-                  extraction: currentIndexingRecord::getEntity()
-              registerCategory:
+              registerIndexingRecordToContext:
                 pipeline: Stage\RegisterContext
                 args:
-                  contextKey: "currentPage"
-          registerActionToContext:
+                  contextKey: "currentIndexingRecord"
+              registerPageToContext:
+                stages:
+                  extractCategory:
+                    pipeline: Stage\Extract
+                    args:
+                      extraction: currentIndexingRecord::getEntity()
+                  registerCategory:
+                    pipeline: Stage\RegisterContext
+                    args:
+                      contextKey: "currentPage"
+              registerActionToContext:
+                stages:
+                  extractAction:
+                    pipeline: Stage\Extract
+                    args:
+                      extraction: currentIndexingRecord::getAction()
+                  registerAction:
+                    pipeline: Stage\RegisterContext
+                    args:
+                      contextKey: "currentAction"
+              registerEntityTypeToContext:
+                stages:
+                  createEntityType:
+                    pipeline: Stage\StaticValue
+                    args:
+                      value: "KLEVU_CMS"
+                  registerEntityType:
+                    pipeline: Stage\RegisterContext
+                    args:
+                      contextKey: "currentEntityType"
+          processPage:
             stages:
-              extractAction:
-                pipeline: Stage\Extract
-                args:
-                  extraction: currentIndexingRecord::getAction()
-              registerAction:
-                pipeline: Stage\RegisterContext
-                args:
-                  contextKey: "currentAction"
-          registerEntityTypeToContext:
-            stages:
-              createEntityType:
-                pipeline: Stage\StaticValue
-                args:
-                  value: "KLEVU_CMS"
-              registerEntityType:
-                pipeline: Stage\RegisterContext
-                args:
-                  contextKey: "currentEntityType"
-      processPage:
-        stages:
-          createRecord:
-            import: transform-page.yml
-  processPayload:
-    import: Klevu_Indexing::etc/pipeline/process-batch-payload.yml
+              createRecord:
+                import: transform-page.yml
+      processPayload:
+        import: Klevu_Indexing::etc/pipeline/process-batch-payload.yml
   logEnd:
     pipeline: Indexing\Stage\Log
     args:

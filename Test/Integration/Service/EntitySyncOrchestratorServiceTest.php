@@ -208,8 +208,10 @@ class EntitySyncOrchestratorServiceTest extends TestCase
         $addResponses = $pipelineResults['KLEVU_CMS::add'];
         $this->assertCount(expectedCount: 1, haystack: $addResponses);
 
+        $pipelineResults = array_shift($addResponses);
+        $this->assertCount(expectedCount: 1, haystack: $pipelineResults);
         /** @var ApiPipelineResult $pipelineResult */
-        $pipelineResult = array_shift($addResponses);
+        $pipelineResult = array_shift($pipelineResults);
 
         $this->assertTrue(condition: $pipelineResult->success);
         $this->assertCount(expectedCount: 1, haystack: $pipelineResult->messages);
@@ -333,8 +335,10 @@ class EntitySyncOrchestratorServiceTest extends TestCase
         $updateResponses = $pipelineResults['KLEVU_CMS::update'];
         $this->assertCount(expectedCount: 1, haystack: $updateResponses);
 
+        $pipelineResults = array_shift($updateResponses);
+        $this->assertCount(expectedCount: 1, haystack: $pipelineResults);
         /** @var ApiPipelineResult $pipelineResult */
-        $pipelineResult = array_shift($updateResponses);
+        $pipelineResult = array_shift($pipelineResults);
 
         $this->assertTrue(condition: $pipelineResult->success);
         $this->assertCount(expectedCount: 1, haystack: $pipelineResult->messages);
@@ -458,8 +462,10 @@ class EntitySyncOrchestratorServiceTest extends TestCase
         $deleteResponses = $pipelineResults['KLEVU_CMS::delete'];
         $this->assertCount(expectedCount: 1, haystack: $deleteResponses);
 
+        $pipelineResults = array_shift($deleteResponses);
+        $this->assertCount(expectedCount: 1, haystack: $pipelineResults);
         /** @var ApiPipelineResult $pipelineResult */
-        $pipelineResult = array_shift($deleteResponses);
+        $pipelineResult = array_shift($pipelineResults);
 
         $this->assertTrue(condition: $pipelineResult->success);
         $this->assertCount(expectedCount: 1, haystack: $pipelineResult->messages);

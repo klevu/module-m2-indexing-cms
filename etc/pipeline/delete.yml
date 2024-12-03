@@ -3,46 +3,51 @@ stages:
     pipeline: Indexing\Stage\Log
     args:
       message: "Start Delete CMS Pipeline"
-  iteratePages:
-    pipeline: Pipeline\Iterate
+  iterateIndexingRecordsBatch:
+    pipeline: Pipeline\Iterate # LOOP OVER ALL PROVIDED BATCHES
     args:
       continueOnException: ~
     stages:
-      processIndexingRecordStart:
+      iteratePages:
+        pipeline: Pipeline\Iterate
+        args:
+          continueOnException: ~
         stages:
-          registerIndexingRecordToContext:
-            pipeline: Stage\RegisterContext
-            args:
-              contextKey: currentIndexingRecord
-          registerActionToContext:
+          processIndexingRecordStart:
             stages:
-              createAction:
-                pipeline: Stage\StaticValue
-                args:
-                  value: "Delete"
-              registerAction:
+              registerIndexingRecordToContext:
                 pipeline: Stage\RegisterContext
                 args:
-                  contextKey: "currentAction"
-          registerEntityTypeToContext:
+                  contextKey: currentIndexingRecord
+              registerActionToContext:
+                stages:
+                  createAction:
+                    pipeline: Stage\StaticValue
+                    args:
+                      value: "Delete"
+                  registerAction:
+                    pipeline: Stage\RegisterContext
+                    args:
+                      contextKey: "currentAction"
+              registerEntityTypeToContext:
+                stages:
+                  createEntityType:
+                    pipeline: Stage\StaticValue
+                    args:
+                      value: "KLEVU_CMS"
+                  registerEntityType:
+                    pipeline: Stage\RegisterContext
+                    args:
+                      contextKey: "currentEntityType"
+          processPage:
             stages:
-              createEntityType:
-                pipeline: Stage\StaticValue
+              id:
+                pipeline: Stage\Extract
                 args:
-                  value: "KLEVU_CMS"
-              registerEntityType:
-                pipeline: Stage\RegisterContext
-                args:
-                  contextKey: "currentEntityType"
-      processPage:
-        stages:
-          id:
-            pipeline: Stage\Extract
-            args:
-              extraction: currentIndexingRecord::getEntityId()
-              transformations: Prepend("pageid_")
-  processPayload:
-    import: Klevu_Indexing::etc/pipeline/process-batch-delete-payload.yml
+                  extraction: currentIndexingRecord::getEntityId()
+                  transformations: Prepend("pageid_")
+      processPayload:
+        import: Klevu_Indexing::etc/pipeline/process-batch-delete-payload.yml
   logEnd:
     pipeline: Indexing\Stage\Log
     args:
