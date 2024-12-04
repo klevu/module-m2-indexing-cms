@@ -29,6 +29,8 @@
             <argument name="logger" xsi:type="object">Klevu\Indexing\Logger\Logger</argument>
             <argument name="syncEnabledProvider"
                       xsi:type="object">Klevu\IndexingCms\Service\Provider\SyncEnabledProvider</argument>
+            <argument name="batchSize" xsi:type="number">2500</argument>
+            <argument name="batchSizeValidator" xsi:type="object">Klevu\Indexing\Validator\BatchSizeValidator</argument>
         </arguments>
     </type>
 
