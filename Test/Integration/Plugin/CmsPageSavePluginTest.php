@@ -78,6 +78,7 @@ class CmsPageSavePluginTest extends TestCase
 
     /**
      * @magentoAppArea global
+     * @magentoAppIsolation enabled
      */
     public function testPlugin_InterceptsCallsToTheField_InGlobalScope(): void
     {
@@ -167,6 +168,7 @@ class CmsPageSavePluginTest extends TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoConfigFixture klevu_test_store_1_store klevu_configuration/auth_keys/js_api_key klevu-js-api-key
      * @magentoConfigFixture klevu_test_store_1_store klevu_configuration/auth_keys/rest_auth_key klevu-rest-auth-key
      */
@@ -199,6 +201,7 @@ class CmsPageSavePluginTest extends TestCase
             IndexingEntity::NEXT_ACTION => Actions::NO_ACTION,
             IndexingEntity::LAST_ACTION => Actions::ADD,
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::IS_INDEXABLE => true,
         ]);
 
@@ -298,6 +301,7 @@ class CmsPageSavePluginTest extends TestCase
             IndexingEntity::NEXT_ACTION => Actions::DELETE,
             IndexingEntity::LAST_ACTION => Actions::UPDATE,
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::IS_INDEXABLE => true,
         ]);
 

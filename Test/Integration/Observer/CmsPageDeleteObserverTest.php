@@ -74,10 +74,10 @@ class CmsPageDeleteObserverTest extends TestCase
     {
         parent::tearDown();
 
+        $this->cleanIndexingEntities('klevu-js-api-key');
+        
         $this->pageFixturesPool->rollback();
         $this->storeFixturesPool->rollback();
-
-        $this->cleanIndexingEntities('klevu-js-api-key');
     }
 
     public function testInvalidateCustomerDataObserver_IsConfigured(): void
@@ -93,6 +93,7 @@ class CmsPageDeleteObserverTest extends TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled
      * @magentoConfigFixture klevu_test_store_1_store klevu_configuration/auth_keys/js_api_key klevu-js-api-key
      * @magentoConfigFixture klevu_test_store_1_store klevu_configuration/auth_keys/rest_auth_key klevu-rest-auth-key
@@ -135,6 +136,7 @@ class CmsPageDeleteObserverTest extends TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled
      * @magentoConfigFixture klevu_test_store_1_store klevu_configuration/auth_keys/js_api_key klevu-js-api-key
      * @magentoConfigFixture klevu_test_store_1_store klevu_configuration/auth_keys/rest_auth_key klevu-rest-auth-key
@@ -189,6 +191,9 @@ class CmsPageDeleteObserverTest extends TestCase
         $this->assertTrue(condition: $indexingEntity->getIsIndexable());
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testResponderServiceNotCalled_ForNonPageInterface(): void
     {
         $mockResponderService = $this->getMockBuilder(EntityUpdateResponderServiceInterface::class)

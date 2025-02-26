@@ -29,10 +29,31 @@
             <argument name="logger" xsi:type="object">Klevu\Indexing\Logger\Logger</argument>
             <argument name="syncEnabledProvider"
                       xsi:type="object">Klevu\IndexingCms\Service\Provider\SyncEnabledProvider</argument>
-            <argument name="batchSize" xsi:type="number">2500</argument>
+            <argument name="batchSize" xsi:type="const">Klevu\Indexing\Constants::DEFAULT_INDEXING_BATCH_SIZE</argument>
             <argument name="batchSizeValidator" xsi:type="object">Klevu\Indexing\Validator\BatchSizeValidator</argument>
         </arguments>
     </type>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\CmsEntityProvider\Batched"
+                 type="Klevu\IndexingCms\Service\Provider\CmsEntityProvider">
+        <arguments>
+            <argument name="logger" xsi:type="object">Klevu\Indexing\Logger\Logger</argument>
+            <argument name="syncEnabledProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\SyncEnabledProvider</argument>
+            <argument name="batchSize" xsi:type="const">Klevu\Indexing\Constants::DEFAULT_INDEXING_BATCH_SIZE</argument>
+            <argument name="batchSizeValidator" xsi:type="object">Klevu\Indexing\Validator\BatchSizeValidator</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\EntityProviderProvider\Batched"
+                 type="Klevu\Indexing\Service\Provider\EntityProviderProvider">
+        <arguments>
+            <argument name="entityProviders" xsi:type="array">
+                <item name="cms"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\CmsEntityProvider\Batched</item>
+            </argument>
+        </arguments>
+    </virtualType>
 
     <virtualType name="Klevu\IndexingCms\Service\Provider\EntityProviderProvider"
                  type="Klevu\Indexing\Service\Provider\EntityProviderProvider">
@@ -41,6 +62,19 @@
                 <item name="cms"
                       xsi:type="object">Klevu\IndexingCms\Service\Provider\CmsEntityProvider</item>
             </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Klevu\IndexingCms\Service\Provider\EntityDiscoveryProvider\Batched"
+                 type="Klevu\Indexing\Service\Provider\EntityDiscoveryProvider">
+        <arguments>
+            <argument name="entityType" xsi:type="string">KLEVU_CMS</argument>
+            <argument name="entityProviderProvider"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\EntityProviderProvider\Batched</argument>
+            <argument name="isIndexableDeterminer"
+                      xsi:type="object">Klevu\IndexingCms\Service\Determiner\IsIndexableDeterminer</argument>
+            <!-- CMS pages can be excluded from stores, therefore this flag is required -->
+            <argument name="isCheckIsIndexableAtStoreScope" xsi:type="boolean">true</argument>
         </arguments>
     </virtualType>
 
@@ -61,12 +95,30 @@
         <arguments>
             <argument name="discoveryProviders" xsi:type="array">
                 <item name="KLEVU_CMS"
-                      xsi:type="object">Klevu\IndexingCms\Service\Provider\EntityDiscoveryProvider</item>
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\EntityDiscoveryProvider\Batched</item>
             </argument>
         </arguments>
     </type>
 
     <type name="Klevu\Indexing\Service\FilterEntitiesToDeleteService">
+        <arguments>
+            <argument name="discoveryProviders" xsi:type="array">
+                <item name="KLEVU_CMS"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\EntityDiscoveryProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Indexing\Service\FilterEntitiesToSetToIndexableService">
+        <arguments>
+            <argument name="discoveryProviders" xsi:type="array">
+                <item name="KLEVU_CMS"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\EntityDiscoveryProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Indexing\Service\FilterEntitiesToSetToNotIndexableService">
         <arguments>
             <argument name="discoveryProviders" xsi:type="array">
                 <item name="KLEVU_CMS"
@@ -283,12 +335,15 @@
         <arguments>
             <argument name="entityIndexerServices" xsi:type="array">
                 <item name="KLEVU_CMS" xsi:type="array">
-                    <item name="add"
-                          xsi:type="object">Klevu\IndexingCms\Service\EntityIndexerService\Add</item>
                     <item name="delete"
+                          sortOrder="10"
                           xsi:type="object">Klevu\IndexingCms\Service\EntityIndexerService\Delete</item>
                     <item name="update"
+                          sortOrder="20"
                           xsi:type="object">Klevu\IndexingCms\Service\EntityIndexerService\Update</item>
+                    <item name="add"
+                          sortOrder="30"
+                          xsi:type="object">Klevu\IndexingCms\Service\EntityIndexerService\Add</item>
                 </item>
             </argument>
         </arguments>

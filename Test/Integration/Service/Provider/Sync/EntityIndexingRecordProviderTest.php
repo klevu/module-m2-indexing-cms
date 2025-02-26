@@ -106,7 +106,7 @@ class EntityIndexingRecordProviderTest extends TestCase
         $provider = $this->instantiateTestObject();
         $generator = $provider->get(apiKey: $apiKey);
 
-        /** @var EntityIndexingRecordInterface[] $result */
+        /** @var EntityIndexingRecordInterface[][] $result */
         $result = [];
         foreach ($generator as $indexingRecords) {
             $result[] = $indexingRecords;

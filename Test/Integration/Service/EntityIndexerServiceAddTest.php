@@ -103,6 +103,7 @@ class EntityIndexerServiceAddTest extends TestCase
         $this->cleanIndexingEntities(apiKey: $apiKey);
         $this->createIndexingEntity([
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ID => $pageFixture->getId(),
             IndexingEntity::NEXT_ACTION => Actions::ADD,
@@ -117,7 +118,8 @@ class EntityIndexerServiceAddTest extends TestCase
         $this->mockBatchServicePutApiCall(isCalled: false);
 
         $service = $this->instantiateTestObject();
-        $service->execute(apiKey: $apiKey);
+        $result = $service->execute(apiKey: $apiKey);
+        $result->current();
     }
 
     /**
@@ -145,6 +147,7 @@ class EntityIndexerServiceAddTest extends TestCase
         $this->cleanIndexingEntities(apiKey: $apiKey);
         $this->createIndexingEntity([
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ID => $pageFixture->getId(),
             IndexingEntity::NEXT_ACTION => Actions::ADD,
@@ -159,9 +162,13 @@ class EntityIndexerServiceAddTest extends TestCase
         $this->mockBatchServicePutApiCall(isCalled: false);
 
         $service = $this->instantiateTestObject();
-        $service->execute(apiKey: $apiKey);
+        $result = $service->execute(apiKey: $apiKey);
+        $result->current();
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testExecute_ReturnsNoop_WhenNoCmsPagesToAdd(): void
     {
         $apiKey = 'klevu-js-key';
@@ -180,13 +187,10 @@ class EntityIndexerServiceAddTest extends TestCase
         $this->mockBatchServicePutApiCall(isCalled: false);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(apiKey: $apiKey);
+        $results = $service->execute(apiKey: $apiKey);
+        $result = $results->current();
 
-        $this->assertSame(
-            expected: IndexerResultStatuses::NOOP,
-            actual: $result->getStatus(),
-            message: 'Status: ' . $result->getStatus()->name,
-        );
+        $this->assertNull(actual: $result);
     }
 
     public function testExecute_ReturnsNoop_WhenCmsSyncDisabled(): void
@@ -216,6 +220,7 @@ class EntityIndexerServiceAddTest extends TestCase
         $this->cleanIndexingEntities(apiKey: $apiKey);
         $this->createIndexingEntity([
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ID => $pageFixture->getId(),
             IndexingEntity::NEXT_ACTION => Actions::ADD,
@@ -225,13 +230,10 @@ class EntityIndexerServiceAddTest extends TestCase
         $this->mockBatchServiceDeleteApiCall(isCalled: false);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(apiKey: $apiKey);
+        $results = $service->execute(apiKey: $apiKey);
+        $result = $results->current();
 
-        $this->assertSame(
-            expected: IndexerResultStatuses::NOOP,
-            actual: $result->getStatus(),
-            message: 'Status: ' . $result->getStatus()->name,
-        );
+        $this->assertNull(actual: $result);
     }
 
     /**
@@ -259,6 +261,7 @@ class EntityIndexerServiceAddTest extends TestCase
         $this->cleanIndexingEntities(apiKey: $apiKey);
         $this->createIndexingEntity([
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ID => $pageFixture->getId(),
             IndexingEntity::NEXT_ACTION => Actions::ADD,
@@ -268,7 +271,8 @@ class EntityIndexerServiceAddTest extends TestCase
         $this->mockBatchServiceDeleteApiCall(isCalled: false);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(apiKey: $apiKey);
+        $results = $service->execute(apiKey: $apiKey);
+        $result = $results->current();
 
         $this->assertSame(
             expected: IndexerResultStatuses::SUCCESS,
@@ -397,13 +401,15 @@ class EntityIndexerServiceAddTest extends TestCase
         $this->cleanIndexingEntities(apiKey: $jsApiKey);
         $this->createIndexingEntity([
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::API_KEY => $jsApiKey,
             IndexingEntity::TARGET_ID => $pageFixture->getId(),
             IndexingEntity::NEXT_ACTION => Actions::ADD,
         ]);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(apiKey: $jsApiKey);
+        $results = $service->execute(apiKey: $jsApiKey);
+        $result = $results->current();
 
         $this->assertSame(
             expected: IndexerResultStatuses::SUCCESS,

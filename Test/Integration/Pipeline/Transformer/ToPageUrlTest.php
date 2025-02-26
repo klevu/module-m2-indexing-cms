@@ -89,6 +89,9 @@ class ToPageUrlTest extends TestCase
         ];
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testTransform_ReturnsPageUrl(): void
     {
         ConfigFixture::setGlobal(
