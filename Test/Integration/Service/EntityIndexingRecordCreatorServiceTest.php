@@ -66,6 +66,9 @@ class EntityIndexingRecordCreatorServiceTest extends TestCase
         $this->categoryFixturePool->rollback();
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testExecute_ThrowsException_WhenIncorrectEntityTypeProvided(): void
     {
         $this->createCategory();

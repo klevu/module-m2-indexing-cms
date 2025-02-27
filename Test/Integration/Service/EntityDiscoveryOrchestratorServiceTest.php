@@ -115,7 +115,16 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->cleanIndexingEntities($apiKey);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
+        $resultGenerators = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
+        $resultsArray = [];
+        foreach ($resultGenerators as $resultGenerator) {
+            $resultsArray[] = iterator_to_array($resultGenerator);
+        }
+        $results = array_filter(
+            array_merge(...$resultsArray),
+        );
+        $result = array_shift($results);
+
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
@@ -175,7 +184,16 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->cleanIndexingEntities($apiKey2);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey1]);
+        $resultGenerators = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey1]);
+        $resultsArray = [];
+        foreach ($resultGenerators as $resultGenerator) {
+            $resultsArray[] = iterator_to_array($resultGenerator);
+        }
+        $results = array_filter(
+            array_merge(...$resultsArray),
+        );
+        $result = array_shift($results);
+
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey1);
@@ -245,7 +263,16 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->cleanIndexingEntities($apiKey);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
+        $resultGenerators = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
+        $resultsArray = [];
+        foreach ($resultGenerators as $resultGenerator) {
+            $resultsArray[] = iterator_to_array($resultGenerator);
+        }
+        $results = array_filter(
+            array_merge(...$resultsArray),
+        );
+        $result = array_shift($results);
+
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
@@ -314,6 +341,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->createIndexingEntity(data: [
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::TARGET_ID => (int)$page1->getId(),
             IndexingEntity::TARGET_PARENT_ID => null,
             IndexingEntity::IS_INDEXABLE => true,
@@ -324,6 +352,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->createIndexingEntity(data: [
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::TARGET_ID => (int)$page2->getId(),
             IndexingEntity::TARGET_PARENT_ID => null,
             IndexingEntity::IS_INDEXABLE => false,
@@ -333,7 +362,16 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         ]);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
+        $resultGenerators = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
+        $resultsArray = [];
+        foreach ($resultGenerators as $resultGenerator) {
+            $resultsArray[] = iterator_to_array($resultGenerator);
+        }
+        $results = array_filter(
+            array_merge(...$resultsArray),
+        );
+        $result = array_shift($results);
+
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
@@ -403,6 +441,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->createIndexingEntity(data: [
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::TARGET_ID => (int)$page1->getId(),
             IndexingEntity::TARGET_PARENT_ID => null,
             IndexingEntity::IS_INDEXABLE => true,
@@ -413,6 +452,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->createIndexingEntity(data: [
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::TARGET_ID => (int)$page2->getId(),
             IndexingEntity::TARGET_PARENT_ID => null,
             IndexingEntity::IS_INDEXABLE => true,
@@ -423,6 +463,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->createIndexingEntity(data: [
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::TARGET_ID => (int)$page3->getId(),
             IndexingEntity::TARGET_PARENT_ID => null,
             IndexingEntity::IS_INDEXABLE => false,
@@ -432,7 +473,16 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         ]);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
+        $resultGenerators = $service->execute(entityTypes: ['KLEVU_CMS'], apiKeys: [$apiKey]);
+        $resultsArray = [];
+        foreach ($resultGenerators as $resultGenerator) {
+            $resultsArray[] = iterator_to_array($resultGenerator);
+        }
+        $results = array_filter(
+            array_merge(...$resultsArray),
+        );
+        $result = array_shift($results);
+
         $this->assertTrue($result->isSuccess());
 
         $indexingEntities = $this->getCmsIndexingEntities($apiKey);
@@ -517,6 +567,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->createIndexingEntity(data: [
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::TARGET_ID => (int)$page->getId(),
             IndexingEntity::IS_INDEXABLE => true,
             IndexingEntity::NEXT_ACTION => Actions::DELETE,
@@ -525,7 +576,16 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         ]);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityTypes: ['KLEVU_CMS']);
+        $resultGenerators = $service->execute(entityTypes: ['KLEVU_CMS']);
+        $resultsArray = [];
+        foreach ($resultGenerators as $resultGenerator) {
+            $resultsArray[] = iterator_to_array($resultGenerator);
+        }
+        $results = array_filter(
+            array_merge(...$resultsArray),
+        );
+        $result = array_shift($results);
+
         $this->assertTrue($result->isSuccess());
 
         $collection = $this->objectManager->create(Collection::class);
@@ -642,6 +702,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->createIndexingEntity(data: [
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::TARGET_ID => (int)$page1->getId(),
             IndexingEntity::TARGET_PARENT_ID => null,
             IndexingEntity::IS_INDEXABLE => false,
@@ -652,6 +713,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->createIndexingEntity(data: [
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::TARGET_ID => (int)$page2->getId(),
             IndexingEntity::TARGET_PARENT_ID => null,
             IndexingEntity::IS_INDEXABLE => true,
@@ -662,6 +724,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->createIndexingEntity(data: [
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::TARGET_ID => (int)$page3->getId(),
             IndexingEntity::TARGET_PARENT_ID => null,
             IndexingEntity::IS_INDEXABLE => true,
@@ -672,6 +735,7 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         $this->createIndexingEntity(data: [
             IndexingEntity::API_KEY => $apiKey,
             IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
             IndexingEntity::TARGET_ID => (int)$page4->getId(),
             IndexingEntity::TARGET_PARENT_ID => null,
             IndexingEntity::IS_INDEXABLE => true,
@@ -681,7 +745,16 @@ class EntityDiscoveryOrchestratorServiceTest extends TestCase
         ]);
 
         $service = $this->instantiateTestObject();
-        $result = $service->execute(entityTypes: ['KLEVU_CMS']);
+        $resultGenerators = $service->execute(entityTypes: ['KLEVU_CMS']);
+        $resultsArray = [];
+        foreach ($resultGenerators as $resultGenerator) {
+            $resultsArray[] = iterator_to_array($resultGenerator);
+        }
+        $results = array_filter(
+            array_merge(...$resultsArray),
+        );
+        $result = array_shift($results);
+
         $this->assertTrue($result->isSuccess());
 
         $collection = $this->objectManager->create(Collection::class);

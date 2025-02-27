@@ -2,7 +2,7 @@ stages:
   logStart:
     pipeline: Indexing\Stage\Log
     args:
-      message: "Start Add CMS Pipeline"
+      message: "Start Add/Update CMS Pipeline"
   iterateIndexingRecordsBatch:
     pipeline: Pipeline\Iterate # LOOP OVER ALL PROVIDED BATCHES
     args:
