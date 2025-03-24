@@ -399,4 +399,16 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Klevu\Indexing\Setup\Patch\Data\RemoveGeneratedIndexingPipelineYaml">
+        <arguments>
+            <argument name="generatedConfigurationOverridesFilepathProviders" xsi:type="array">
+                <item name="indexing_cms_add_update"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\GeneratedConfigurationOverridesFilepathProvider\AddUpdate</item>
+                <item name="indexing_cms_add_delete"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\GeneratedConfigurationOverridesFilepathProvider\Delete</item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>
