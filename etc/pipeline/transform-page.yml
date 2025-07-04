@@ -43,7 +43,7 @@ stages:
             args:
               extraction: currentPage::
               transformations:
-                - ToPageUrl
+                - ToPageUrl($store::getForCurrentStore().base_url)
       visibility:
         stages:
           -
