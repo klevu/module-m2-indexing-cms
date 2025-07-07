@@ -8,10 +8,12 @@ declare(strict_types=1);
 
 namespace Klevu\IndexingCms\Pipeline\Transformer;
 
+use Klevu\IndexingCms\Pipeline\Provider\Argument\Transformer\ToPageUrlArgumentProvider;
 use Klevu\Pipelines\Exception\Transformation\InvalidInputDataException;
 use Klevu\Pipelines\Model\ArgumentIterator;
 use Klevu\Pipelines\Transformer\TransformerInterface;
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\UrlInterface;
 
 class ToPageUrl implements TransformerInterface
@@ -20,14 +22,23 @@ class ToPageUrl implements TransformerInterface
      * @var UrlInterface
      */
     private UrlInterface $urlBuilder;
+    /**
+     * @var ToPageUrlArgumentProvider
+     */
+    private ToPageUrlArgumentProvider $argumentProvider;
 
     /**
      * @param UrlInterface $urlBuilder
+     * @param ToPageUrlArgumentProvider|null $argumentProvider
      */
     public function __construct(
         UrlInterface $urlBuilder,
+        ?ToPageUrlArgumentProvider $argumentProvider = null,
     ) {
         $this->urlBuilder = $urlBuilder;
+        $objectManager = ObjectManager::getInstance();
+        $this->argumentProvider = $argumentProvider
+            ?: $objectManager->get(ToPageUrlArgumentProvider::class);
     }
 
     /**
@@ -52,9 +63,18 @@ class ToPageUrl implements TransformerInterface
             );
         }
 
-        return $this->urlBuilder->getUrl(
-            routePath: null,
-            routeParams: ['_direct' => $data->getIdentifier()],
+        $storeBaseUrlArgumentValue = $this->argumentProvider->getStoreBaseUrlArgumentValue(
+            arguments: $arguments,
+            extractionPayload: $data,
+            extractionContext: $context,
         );
+        if (null === $storeBaseUrlArgumentValue) {
+            return $this->urlBuilder->getUrl(
+                routePath: null,
+                routeParams: ['_direct' => $data->getIdentifier()],
+            );
+        }
+
+        return $storeBaseUrlArgumentValue . $data->getIdentifier();
     }
 }

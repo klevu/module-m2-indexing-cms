@@ -411,4 +411,9 @@
         </arguments>
     </type>
 
+    <type name="Klevu\IndexingCms\Pipeline\Provider\Argument\Transformer\ToPageUrlArgumentProvider">
+        <arguments>
+            <argument name="argumentProvider" xsi:type="object">Klevu\Pipelines\Provider\ArgumentProvider</argument>
+        </arguments>
+    </type>
 </config>
