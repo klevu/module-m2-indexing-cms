@@ -2,9 +2,9 @@
     "name": "klevu/module-m2-indexing-cms",
     "description": "Provides CMS data and configuration for Klevu indexing",
     "type": "magento2-module",
-    "version": "3.1.1",
+    "version": "3.1.2",
     "require": {
-        "klevu/module-m2-indexing": "^3.1.1",
+        "klevu/module-m2-indexing": "^3.3.0",
         "magento/module-cms": "^104.0.4",
         "magento/framework": "^103.0.4",
         "php": "~8.1.0|~8.2.0|~8.3.0|~8.4.0"
