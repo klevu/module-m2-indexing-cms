@@ -127,6 +127,33 @@
         </arguments>
     </type>
 
+    <type name="Klevu\IndexingCms\Service\Provider\EntitySyncConditionsValuesProvider">
+        <arguments>
+            <argument name="isIndexableDeterminer"
+                      xsi:type="object">Klevu\IndexingCms\Service\Determiner\IsIndexableDeterminer</argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Indexing\Service\Provider\EntitySyncConditionsValuesProvider">
+        <arguments>
+            <argument name="entitySyncConditionsValuesProviders" xsi:type="array">
+                <item name="KLEVU_CMS"
+                      xsi:type="object">Klevu\IndexingCms\Service\Provider\EntitySyncConditionsValuesProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Klevu\Indexing\Console\Command\EntitySyncInformationCommand">
+        <arguments>
+            <argument name="isIndexableDeterminers" xsi:type="array">
+                <item name="KLEVU_CMS"
+                      xsi:type="object">Klevu\IndexingCms\Service\Determiner\IsIndexableDeterminer</item>
+            </argument>
+        </arguments>
+        <plugin name="Klevu_IndexingCms::AddCmsSyncInformationPlugin"
+                type="Klevu\IndexingCms\Plugin\Console\Command\EntitySyncInformationCommand\AddCmsSyncInformationPlugin"/>
+    </type>
+
     <type name="Klevu\IndexingCms\Service\Determiner\DisabledPagesIsIndexableCondition">
         <arguments>
             <argument name="logger" xsi:type="object">Klevu\Indexing\Logger\Logger</argument>
