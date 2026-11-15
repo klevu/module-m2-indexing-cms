@@ -218,6 +218,59 @@ class CmsPageSavePluginTest extends TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
+     * @magentoConfigFixture klevu_test_store_1_store klevu_configuration/auth_keys/js_api_key klevu-js-api-key
+     * @magentoConfigFixture klevu_test_store_1_store klevu_configuration/auth_keys/rest_auth_key klevu-rest-auth-key
+     */
+    public function testAroundSave_ForExistingPages_UnwatchedChangeWithSameStores_DoesNotChangeNextAction(): void
+    {
+        $apiKey = 'klevu-js-api-key';
+
+        $this->createStore();
+        $storeFixture = $this->storeFixturesPool->get('test_store');
+        $store = $storeFixture->get();
+
+        $pageFactory = $this->objectManager->get(PageInterfaceFactory::class);
+        /** @var Page&PageInterface $page */
+        $page = $pageFactory->create();
+        $page->setIdentifier('page-test-url');
+        $page->setTitle('Page Test');
+        $page->setIsActive(true);
+        $page->setContentHeading('Page Test - Content Heading');
+        $page->setContent('Page Test - Content');
+        $page->setStoreId($store->getId());
+
+        $pageResourceModel = $this->objectManager->get(PageResourceModel::class);
+        $pageResourceModel->save($page);
+        $this->cleanIndexingEntities($apiKey);
+
+        $this->createIndexingEntity([
+            IndexingEntity::TARGET_ID => $page->getId(),
+            IndexingEntity::API_KEY => $apiKey,
+            IndexingEntity::NEXT_ACTION => Actions::NO_ACTION,
+            IndexingEntity::LAST_ACTION => Actions::ADD,
+            IndexingEntity::TARGET_ENTITY_TYPE => 'KLEVU_CMS',
+            IndexingEntity::TARGET_ENTITY_SUBTYPE => 'cms_page',
+            IndexingEntity::IS_INDEXABLE => true,
+        ]);
+
+        /** @var Page&PageInterface $reloadedPage */
+        $reloadedPage = $pageFactory->create();
+        $pageResourceModel->load($reloadedPage, $page->getId());
+        $reloadedPage->setSortOrder(5);
+        $pageResourceModel->save($reloadedPage);
+
+        $cmsIndexingEntity = $this->getIndexingEntityForPage($apiKey, $page);
+        $this->assertNotNull($cmsIndexingEntity);
+        $this->assertSame(
+            expected: Actions::NO_ACTION,
+            actual: $cmsIndexingEntity->getNextAction(),
+            message: 'Expected ' . Actions::NO_ACTION->value
+                . ', received ' . $cmsIndexingEntity->getNextAction()->value,
+        );
+    }
+
+    /**
      * @magentoConfigFixture klevu_test_store_1_store klevu_configuration/auth_keys/js_api_key klevu-js-api-key
      * @magentoConfigFixture klevu_test_store_1_store klevu_configuration/auth_keys/rest_auth_key klevu-rest-auth-key
      * @magentoConfigFixture default/klevu/indexing/exclude_disabled_cms 1
