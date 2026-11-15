@@ -155,7 +155,7 @@ class CmsPageResourceModelPlugin
         $originalStoreIds = $this->processStoreIds($originalPage->getStoreId());
         $updatedStoreIds = $this->processStoreIds($page->getStoreId());
         $newStoreIds = array_diff($updatedStoreIds, $originalStoreIds);
-        $removedStoreIds = array_diff($originalStoreIds, $newStoreIds);
+        $removedStoreIds = array_diff($originalStoreIds, $updatedStoreIds);
 
         return array_filter(
             array_unique(
